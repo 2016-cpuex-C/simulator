@@ -1,11 +1,4 @@
 # simulator
-./sim -f < fib.s　等で動きます
-実行が終わるとparse.logとregister.logが出てきます
+./sim -f < fib.s　等で動きます<br />
+実行が終わるとparse.logとregister.logが出てきます.<br />
 オプションを-fm, -f, -mとするとメモリとか浮動小数レジスタを見れます
-
-#IGNORE ME
-ignore me
-##IGNORE ME
-###IGNORE ME
-####IGNORE ME
-**ignore me**
