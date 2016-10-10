@@ -313,7 +313,6 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (reg[2] == 1) {
                 printf("%d", reg[4]);
             } else if (reg[2] == 2) {
-                f_reg[4];
                 printf("%f", f_reg[12]);
             } else if (reg[2] == 4) {
                 char temp[100];
