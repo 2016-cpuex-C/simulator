@@ -2,15 +2,19 @@
 #include <stdio.h>
 #include <string.h>
 #include "execute.c"
-int op[100000][5]; 
-char label[200000][100]; 
-char string[100000][100]; 
-int32_t word[200000][100]; 
-int pc = 0;
+#include "global.h"
+
+static int op[MEM_SIZE][5]; 
+static char label[2 * MEM_SIZE][MAX_STR]; 
+static char string[MEM_SIZE][MAX_STR]; 
+static int32_t word[2 * MEM_SIZE][MAX_STR]; 
+
+int pc = 1;
 int lc = 0;
 int inner_lc = 0;
 FILE *f;
 int parse_error_flag = 0;
+extern FILE *yyin;
 %}
 
 %union {
@@ -30,13 +34,15 @@ char* str;
 %type <num> J JR JAL JALR
 %type <num> SYSCALL
 %type <num> SLT
-%type <num> SLL NEG
-%type <num> ADDS SUBS MULS DIVS ABSS NEGS
+%type <num> SLL SRL NEG
+%type <num> ADDS SUBS MULS DIVS ABSS NEGS FLOORWS SQRTS
 %type <num> MOVS 
 %type <num> CVTWS CVTSW TRUNCWS 
+%type <num> CEQS CLES CLTS BC1T BC1F
 %type <num> ADDD SUBD MULD DIVD
 %type <num> MOVD
 
+%type <num> ENTER
 %type <str> LABEL
 %type <str> STRING
 %type <num> DATA
@@ -59,13 +65,15 @@ char* str;
 %token J JR JAL JALR
 %token SYSCALL
 %token SLT
-%token SLL NEG
-%token ADDS SUBS MULS DIVS ABSS NEGS
+%token SLL SRL NEG
+%token ADDS SUBS MULS DIVS ABSS NEGS FLOORWS SQRTS
 %token MOVS 
 %token CVTWS CVTSW TRUNCWS 
+%token CEQS CLES CLTS BC1T BC1F
 %token ADDD SUBD MULD DIVD
 %token MOVD
 
+%token ENTER
 %token STRING
 %token LABEL
 %token DATA
@@ -82,7 +90,6 @@ list:
         |
         list stat 
         {
-            pc += 1;
         }
         |
         list error
@@ -90,6 +97,11 @@ list:
         }
         ;
 stat:    
+         ENTER
+         {
+            pc += 1;
+         }
+         |
          DATA
          {
          }
@@ -105,14 +117,14 @@ stat:
          WORD HEX
          {
             fprintf(f, " word");
-            word[lc + 100000][inner_lc] = strtol($2, NULL, 16);
+            word[lc + MEM_SIZE][inner_lc] = strtol($2, NULL, 16);
             inner_lc++;
          }
          |   
          WORD IMMEDIATE
          {
             fprintf(f, " word");
-            word[lc + 100000][inner_lc] = $2;
+            word[lc + MEM_SIZE][inner_lc] = $2;
             inner_lc++;
          }
          |   
@@ -254,6 +266,15 @@ stat:
             op[pc][0] = LA;
             op[pc][1] = $2;
             strcpy(label[pc], $3); 
+         }
+         |
+         LS F_REGISTER LABEL  
+         {
+            fprintf(f, " ls");
+            op[pc][0] = LS;
+            op[pc][1] = $2;
+            strcpy(label[pc], $3); 
+            op[pc][3] = -3;
          }
          |
          LS F_REGISTER REGISTER  
@@ -576,6 +597,15 @@ stat:
             op[pc][3] = $4;
          }
          |
+         SRL REGISTER REGISTER IMMEDIATE 
+         {
+            fprintf(f, " srl");
+            op[pc][0] = SLL;
+            op[pc][1] = $2;
+            op[pc][2] = $3;
+            op[pc][3] = $4;
+         }
+         |
          NEG REGISTER REGISTER 
          {
             fprintf(f, " neg");
@@ -636,6 +666,22 @@ stat:
             op[pc][2] = $3;
          }
          |
+         FLOORWS F_REGISTER F_REGISTER
+         {
+            fprintf(f, " floor.w.s");
+            op[pc][0] = FLOORWS;
+            op[pc][1] = $2;
+            op[pc][2] = $3;
+         }
+         |
+         SQRTS F_REGISTER F_REGISTER
+         {
+            fprintf(f, " sqrt.s");
+            op[pc][0] = SQRTS;
+            op[pc][1] = $2;
+            op[pc][2] = $3;
+         }
+         |
          MOVS F_REGISTER F_REGISTER
          {
             fprintf(f, " mov.s");
@@ -666,6 +712,44 @@ stat:
             op[pc][0] = TRUNCWS;
             op[pc][1] = $2;
             op[pc][2] = $3;
+         }
+         |
+         CEQS F_REGISTER F_REGISTER
+         {
+            fprintf(f, " c.eq.s");
+            op[pc][0] = CEQS;
+            op[pc][1] = $2;
+            op[pc][2] = $3;
+         }
+         |
+         CLES F_REGISTER F_REGISTER
+         {
+            fprintf(f, " c.le.s");
+            op[pc][0] = CLES;
+            op[pc][1] = $2;
+            op[pc][2] = $3;
+         }
+         |
+         CLTS F_REGISTER F_REGISTER
+         {
+            fprintf(f, " c.lt.s");
+            op[pc][0] = CLTS;
+            op[pc][1] = $2;
+            op[pc][2] = $3;
+         }
+         |
+         BC1T LABEL
+         {
+            fprintf(f, " bc1t");
+            op[pc][0] = BC1T;
+            strcpy(label[pc], $2); 
+         }
+         |
+         BC1F LABEL
+         {
+            fprintf(f, " bc1f");
+            op[pc][0] = BC1F;
+            strcpy(label[pc], $2); 
          }
          |
          ADDD F_REGISTER F_REGISTER F_REGISTER
@@ -715,9 +799,30 @@ stat:
 %%
 main(int argc, char *argv[])
 {
+
+////    int (* op)[5];
+//    op = malloc(sizeof(int) * MEM_SIZE * 5);
+//    
+//  //      char (* label)[MAX_STR];
+//    label = malloc(sizeof(char) * 2 * MEM_SIZE * MAX_STR);
+//
+//   //     char (* string)[MAX_STR];
+//    string = malloc(sizeof(char) * MEM_SIZE * MAX_STR);
+//
+//    //    int32_t (* word)[MAX_STR];
+//    word = malloc(sizeof(int32_t) * 2 * MEM_SIZE * MAX_STR);
+
+    FILE *fh;
+    if (argc == 2 && (fh = fopen(argv[1], "r"))) {
+        yyin = fh;
+    }
+    if (argc == 3 && (fh = fopen(argv[2], "r"))) {
+        yyin = fh;
+    }
+
     f = fopen("parse.log", "w"); 
     int i;
-    for (i = 0; i < 200000; i++) {
+    for (i = 0; i < 2 * MEM_SIZE; i++) {
         word[i][0] = INT_MAX;
     }
     yyparse();
@@ -725,6 +830,7 @@ main(int argc, char *argv[])
 
     execute(op, label, string, word, argv[1]);
 }
+
 yyerror(s)
 char *s;
 {
@@ -734,6 +840,7 @@ char *s;
     }
     fprintf(f, "\n%s",s);
 }
+
 yywrap()
 {
     return(1);

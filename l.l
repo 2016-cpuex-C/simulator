@@ -17,7 +17,9 @@ extern YYSTYPE yylval;
 , ;
 \( ;
 \) ;
-\n ;   
+\n      {
+            return(ENTER);   
+        }
 
 \.data  {
             return(DATA);
@@ -458,6 +460,9 @@ slt     {
 sll     {
             return(SLL);
         }
+srl     {
+            return(SRL);
+        }
 neg     {
             return(NEG);
         }
@@ -476,6 +481,12 @@ div\.s   {
 abs\.s   { 
             return(ABSS);
         }
+floor\.w\.s   { 
+            return(FLOORWS);
+        }
+sqrt\.s   { 
+            return(SQRTS);
+        }
 neg\.s   { 
             return(NEGS);
         }
@@ -490,6 +501,21 @@ cvt\.s\.w   {
         }
 trunc\.w\.s   { 
             return(TRUNCWS);
+        }
+c\.eq\.s   { 
+            return(CEQS);
+        }
+c\.le\.s   { 
+            return(CLES);
+        }
+c\.lt\.s   { 
+            return(CLTS);
+        }
+bc1t   { 
+            return(BC1T);
+        }
+bc1f   { 
+            return(BC1F);
         }
 sub\.d   {
             return(SUBD);
