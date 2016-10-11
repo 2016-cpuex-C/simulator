@@ -600,7 +600,7 @@ stat:
          SRL REGISTER REGISTER IMMEDIATE 
          {
             fprintf(f, " srl");
-            op[pc][0] = SLL;
+            op[pc][0] = SRL;
             op[pc][1] = $2;
             op[pc][2] = $3;
             op[pc][3] = $4;
