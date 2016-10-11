@@ -330,13 +330,13 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 break;
             } else if (reg[2] == 11) {
                 printf("%c", reg[4]);
-            } else if (reg[0] == 30) {
+            } else if (reg[2] == 30) {
                 printf("sin\n");
                 f_reg[0] = sin(f_reg[0]);
-            } else if (reg[0] == 31) {
+            } else if (reg[2] == 31) {
                 printf("cos\n");
                 f_reg[0] = cos(f_reg[0]);
-            } else if (reg[0] == 32) {
+            } else if (reg[2] == 32) {
                 printf("atan\n");
                 f_reg[0] = atan(f_reg[0]);
             }
