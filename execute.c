@@ -70,8 +70,8 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         } else if (op[pc][0] == SUB) {
             //printf("sub\n");
             reg[op[pc][1]] = reg[op[pc][2]] - reg[op[pc][3]];
-        } else if (op[pc][0] == SUB) {
-            //printf("sub\n");
+        } else if (op[pc][0] == SUBI) {
+            //printf("subi\n");
             reg[op[pc][1]] = reg[op[pc][2]] - op[pc][3];
         } else if (op[pc][0] == MUL) {
             //printf("mul\n");
@@ -349,8 +349,8 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         } else if (op[pc][0] == SLL) {
             //printf("sll\n");
             reg[op[pc][1]] = reg[op[pc][2]] << op[pc][3];
-        } else if (op[pc][0] == SLL) {
-            //printf("sll\n");
+        } else if (op[pc][0] == SRL) {
+            //printf("srl\n");
             reg[op[pc][1]] = reg[op[pc][2]] >> op[pc][3];
         } else if (op[pc][0] == NEG) {
             //printf("neg\n");
