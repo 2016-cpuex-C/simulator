@@ -517,20 +517,8 @@ bc1t   {
 bc1f   { 
             return(BC1F);
         }
-sub\.d   {
-            return(SUBD);
-        }
-add\.d   {
-            return(ADDD);
-        }
-mul\.d   {
-            return(MULD);
-        }
-div\.d   {
-            return(DIVD);
-        }
-mov\.d   {
-            return(MOVD);
+break   { 
+            return(BREAK);
         }
 
 [a-zA-Z0-9_\.]* { 

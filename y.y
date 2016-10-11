@@ -39,6 +39,7 @@ char* str;
 %type <num> MOVS 
 %type <num> CVTWS CVTSW TRUNCWS 
 %type <num> CEQS CLES CLTS BC1T BC1F
+%type <num> BREAK 
 %type <num> ADDD SUBD MULD DIVD
 %type <num> MOVD
 
@@ -70,6 +71,7 @@ char* str;
 %token MOVS 
 %token CVTWS CVTSW TRUNCWS 
 %token CEQS CLES CLTS BC1T BC1F
+%token BREAK 
 %token ADDD SUBD MULD DIVD
 %token MOVD
 
@@ -752,48 +754,10 @@ stat:
             strcpy(label[pc], $2); 
          }
          |
-         ADDD F_REGISTER F_REGISTER F_REGISTER
+         BREAK 
          {
-            fprintf(f, " add.d");
-            op[pc][0] = ADDD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         SUBD F_REGISTER F_REGISTER F_REGISTER
-         {
-            fprintf(f, " sub.d");
-            op[pc][0] = SUBD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         MULD F_REGISTER F_REGISTER F_REGISTER
-         {
-            fprintf(f, " mul.d");
-            op[pc][0] = MULD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         | 
-         DIVD F_REGISTER F_REGISTER F_REGISTER
-         {
-            fprintf(f, " div.d");
-            op[pc][0] = DIVD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         | 
-         MOVD F_REGISTER F_REGISTER
-         {
-            fprintf(f, " mov.d");
-            op[pc][0] = MOVD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
+            fprintf(f, " break");
+            op[pc][0] = BREAK;
          }
          ;
 %%
