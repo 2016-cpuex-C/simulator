@@ -426,6 +426,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         } 
         if (break_bit || op[pc][0] == BREAK) { // This instruction is not in mips!!
             //printf("break\n");
+            int temp;
             break_bit = 1;
             printf("pc: %d\n", pc);
             printf("reg: ");fflush(stdout); 
@@ -448,8 +449,50 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             printf("%6d", hi);fflush(stdout); 
             printf("%6d", lo);fflush(stdout); 
             printf("\n");fflush(stdout); 
-            printf("Press Any Key to Continue\n");  
-            getchar();  
+            printf("Press f to show floating point registers. Enter to continue\n");  
+            temp = getchar();  
+
+            if (temp == 102) {
+                int i;
+                printf("f_reg: ");fflush(stdout); 
+                printf("\n");fflush(stdout); 
+                for (i = 0; i < 8; i++) {
+                    if (f_reg[i] == 0) {
+                        printf("  %2.2f", 0.0);fflush(stdout); 
+                    } else {
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                    }
+                }
+                printf("\n");fflush(stdout); 
+                for (i = 8; i < 16; i++) {
+                    if (f_reg[i] == 0) {
+                        printf("  %2.2f", 0.0);fflush(stdout); 
+                    } else {
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                    }
+                }
+                printf("\n");fflush(stdout); 
+                for (i = 16; i < 24; i++) {
+                    if (f_reg[i] == 0) {
+                        printf("  %2.2f", 0.0);fflush(stdout); 
+                    } else {
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                    }
+                }
+                printf("\n");fflush(stdout); 
+                for (i = 24; i < 32; i++) {
+                    if (f_reg[i] == 0) {
+                        printf("  %2.2f", 0.0);fflush(stdout); 
+                    } else {
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                    }
+                }
+                printf("\n");fflush(stdout); 
+                temp = getchar();  
+                printf("Press enter to continue.\n");
+                temp = getchar();  
+            }
+                
         } 
        
         how_many_times_called[pc] += 1;
