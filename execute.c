@@ -61,22 +61,9 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         } else if (op[pc][0] == ADDI) {
             //printf("addi\n");
             reg[op[pc][1]] = reg[op[pc][2]] + op[pc][3];
-        } else if (op[pc][0] == ADDU) {
-            //printf("addu\n");
-            u temp1, temp2, temp3; 
-            temp2.i = reg[op[pc][2]];
-            temp3.i = reg[op[pc][3]];
-            temp1.ui = temp2.ui + temp3.ui;
-            reg[op[pc][1]] = temp1.i;
         } else if (op[pc][0] == SUB) {
             //printf("sub\n");
             reg[op[pc][1]] = reg[op[pc][2]] - reg[op[pc][3]];
-        } else if (op[pc][0] == SUBI) {
-            //printf("subi\n");
-            reg[op[pc][1]] = reg[op[pc][2]] - op[pc][3];
-        } else if (op[pc][0] == MUL) {
-            //printf("mul\n");
-            reg[op[pc][1]] = reg[op[pc][2]] * reg[op[pc][3]];
         } else if (op[pc][0] == MULT) {
             //printf("mult\n");
             int64_t temp  = (int64_t) reg[op[pc][1]] * reg[op[pc][2]];
@@ -177,54 +164,6 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             strcpy(temp, label[pc]);
             pc = search_label(label, strcat(temp, ":"));
             continue;
-        } else if (op[pc][0] == BEQZ) {
-            //printf("beqz\n");
-            if(reg[op[pc][1]] == 0) {
-                char temp[100];
-                strcpy(temp, label[pc]);
-                pc = search_label(label, strcat(temp, ":"));
-                continue;
-            } 
-        } else if (op[pc][0] == BNEZ) {
-            //printf("bnez\n");
-            if(reg[op[pc][1]] != 0) {
-                char temp[100];
-                strcpy(temp, label[pc]);
-                pc = search_label(label, strcat(temp, ":"));
-                continue;
-            } 
-        } else if (op[pc][0] == BLTZ) {
-            //printf("bltz\n");
-            if(reg[op[pc][1]] < 0) {
-                char temp[100];
-                strcpy(temp, label[pc]);
-                pc = search_label(label, strcat(temp, ":"));
-                continue;
-            } 
-        } else if (op[pc][0] == BLEZ) {
-            //printf("blez\n");
-            if(reg[op[pc][1]] <= 0) {
-                char temp[100];
-                strcpy(temp, label[pc]);
-                pc = search_label(label, strcat(temp, ":"));
-                continue;
-            } 
-        } else if (op[pc][0] == BGTZ) {
-            //printf("bgtz\n");
-            if(reg[op[pc][1]] > 0) {
-                char temp[100];
-                strcpy(temp, label[pc]);
-                pc = search_label(label, strcat(temp, ":"));
-                continue;
-            } 
-        } else if (op[pc][0] == BGEZ) {
-            //printf("bgez\n");
-            if(reg[op[pc][1]] >= 0) {
-                char temp[100];
-                strcpy(temp, label[pc]);
-                pc = search_label(label, strcat(temp, ":"));
-                continue;
-            } 
         } else if (op[pc][0] == BEQ) {
             //printf("beq\n");
             if(reg[op[pc][1]] == reg[op[pc][2]]) {
