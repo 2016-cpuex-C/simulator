@@ -273,13 +273,13 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             } else if (reg[2] == 11) {
                 printf("%c", reg[4]);
             } else if (reg[2] == 30) {
-                printf("sin\n");
+                //printf("sin\n");
                 f_reg[0] = sin(f_reg[0]);
             } else if (reg[2] == 31) {
-                printf("cos\n");
+                //printf("cos\n");
                 f_reg[0] = cos(f_reg[0]);
             } else if (reg[2] == 32) {
-                printf("atan\n");
+                //printf("atan\n");
                 f_reg[0] = atan(f_reg[0]);
             }
         } else if (op_pc_0 == SLT) {
