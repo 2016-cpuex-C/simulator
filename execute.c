@@ -446,7 +446,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     
     fclose(f);
    
-    //analyze_how_many_times_called(label, how_many_times_called);
+    //analyze_how_many_times_called(op, how_many_times_called);
 
     return;
     
