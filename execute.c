@@ -439,7 +439,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 
         } 
        
-        how_many_times_called[pc] += 1;
+        //how_many_times_called[pc] += 1;
         pc += 1;
         
     }
