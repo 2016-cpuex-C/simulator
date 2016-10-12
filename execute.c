@@ -376,7 +376,9 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             f_reg[op[pc][1]] =  - f_reg[op[pc][2]];
         } else if (op[pc][0] == FLOORWS) {
             //printf("floor.w.s\n");
-            f_reg[op[pc][1]] =  floor(f_reg[op[pc][2]]);
+            u temp;
+            temp.i = (int)floor(f_reg[op[pc][2]]);
+            f_reg[op[pc][1]] = temp.f;
         } else if (op[pc][0] == SQRTS) {
             //printf("sqrt.s\n");
             f_reg[op[pc][1]] =  sqrt(f_reg[op[pc][2]]);
