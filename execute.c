@@ -8,26 +8,16 @@
 #include <math.h>
 #include <assert.h>
 
+#define label_cache_size 4
+
 typedef union {
     int32_t i;
     float f;
     uint32_t ui;
 } u;
-typedef union {
-    int32_t    i[2];
-    double d;
-} dbl;
 
-int gethi(double f) {
-    dbl x;
-    x.d = f;
-    return x.i[0];
-}
-int getlo(double f) {
-    dbl x;
-    x.d = f;
-    return x.i[1];
-}
+
+int label_cache[label_cache_size];
 
 int search_label (char label[MEM_SIZE][MAX_STR], char *str);
 
@@ -454,16 +444,25 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
 
 int search_label (char label[MEM_SIZE][MAX_STR], char *str)
 {
-    int i = 0;
+    int i, j;
+    for(i = 0; i < label_cache_size; i++) {
+        if (strcmp(label[label_cache[i]], str) == 0) {
+            return label_cache[i];
+        }
+    }
     for(i = 0; i < MEM_SIZE; i++) {
         if (strcmp(label[i], str) == 0) {
-            break;
+            for(j = label_cache_size - 1; j > 0; j--) {
+                label_cache[j] = label_cache[j - 1];
+            }
+            label_cache[0] = i;
+            return i;
         }
         if (i == 999999) {
             printf("label not found\n");
             exit(0);
         }
     }
-    return i;
+    return 0;
 }
     
