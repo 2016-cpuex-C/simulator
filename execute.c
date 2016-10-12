@@ -47,45 +47,48 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     for (i = 0; i < MEM_SIZE; i++) {
         mem[i] = INT_MAX;  //initialilze all memory to int_max. to detect invalid memory access
     }
+
     int how_many_times_called[MEM_SIZE];
+
     int pc = search_label(label, "main:");
+
+    int op_pc_0;
 
     while (1){
 
         log_main (f, pc, reg, f_reg, hi, lo, mem, option);
 
+        op_pc_0 = op[pc][0];
+
         //printf("%d ", pc);
-        if (op[pc][0] == ADD) {
+        if (op_pc_0 == ADD) {
             //printf("add\n");
             reg[op[pc][1]] = reg[op[pc][2]] + reg[op[pc][3]];
-        } else if (op[pc][0] == ADDI) {
+        } else if (op_pc_0 == ADDI) {
             //printf("addi\n");
             reg[op[pc][1]] = reg[op[pc][2]] + op[pc][3];
-        } else if (op[pc][0] == SUB) {
+        } else if (op_pc_0 == SUB) {
             //printf("sub\n");
             reg[op[pc][1]] = reg[op[pc][2]] - reg[op[pc][3]];
-        } else if (op[pc][0] == MULT) {
+        } else if (op_pc_0 == MULT) {
             //printf("mult\n");
             int64_t temp  = (int64_t) reg[op[pc][1]] * reg[op[pc][2]];
             lo = (int32_t) temp;
             hi = (int32_t) (temp >> 32);
-        } else if (op[pc][0] == DIV) {
+        } else if (op_pc_0 == DIV) {
             //printf("div\n");
             hi = reg[op[pc][1]] % reg[op[pc][2]];
             lo = reg[op[pc][1]] / reg[op[pc][2]];
-        } else if (op[pc][0] == MFHI) {
+        } else if (op_pc_0 == MFHI) {
             //printf("mfhi\n");
             reg[op[pc][1]] = hi;
-        } else if (op[pc][0] == MFLO) {
+        } else if (op_pc_0 == MFLO) {
             //printf("mflo\n");
             reg[op[pc][1]] = lo;
-        } else if (op[pc][0] == ANDI) {
-            //printf("andi\n");
-            reg[op[pc][1]] = reg[op[pc][2]] && op[pc][3];
-        } else if (op[pc][0] == LI) {
+        } else if (op_pc_0 == LI) {
             //printf("li\n");
             reg[op[pc][1]] = op[pc][2];
-        } else if (op[pc][0] == LA) {
+        } else if (op_pc_0 == LA) {
             //printf("la\n");
             char temp[100];
             strcpy(temp, label[pc]);
@@ -96,7 +99,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             } else {
                 reg[op[pc][1]] = search_label(label, temp);
             }
-        } else if (op[pc][0] == LS) {
+        } else if (op_pc_0 == LS) {
             //printf("l.s\n");
             u temp;
             if (op[pc][3] == -3) {
@@ -122,7 +125,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 temp.i = word[reg[op[pc][3]]][0];
                 f_reg[op[pc][1]] = temp.f;
             }
-        } else if (op[pc][0] == SS) {
+        } else if (op_pc_0 == SS) {
             //printf("s.s\n");
             u temp;
             if (op[pc][3] == -1) {
@@ -136,7 +139,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 temp.f = f_reg[op[pc][1]]; 
                 mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = temp.i; 
             }
-        } else if (op[pc][0] == LW) {
+        } else if (op_pc_0 == LW) {
             //printf("lw\n");
             if (op[pc][3] == -3) {
                 char temp[100];
@@ -149,7 +152,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             } else {
                 reg[op[pc][1]] = word[reg[op[pc][3]]][0];
             }
-        } else if (op[pc][0] == SW) {
+        } else if (op_pc_0 == SW) {
             //printf("sw\n");
             if (op[pc][3] == -1) {
                 mem[STACK_DIRECTION * (reg[op[pc][2]])] = reg[op[pc][1]];
@@ -158,13 +161,13 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 //if(op[pc][2] + reg[op[pc][3]] > 1000000) printf("s.w %d\n", op[pc][2] + reg[op[pc][3]]);
                 mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = reg[op[pc][1]];
             }
-        } else if (op[pc][0] == B) {
+        } else if (op_pc_0 == B) {
             //printf("b\n");
             char temp[100];
             strcpy(temp, label[pc]);
             pc = search_label(label, strcat(temp, ":"));
             continue;
-        } else if (op[pc][0] == BEQ) {
+        } else if (op_pc_0 == BEQ) {
             //printf("beq\n");
             if(reg[op[pc][1]] == reg[op[pc][2]]) {
                 char temp[100];
@@ -172,7 +175,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 pc = search_label(label, strcat(temp, ":"));
                 continue;
             } 
-        } else if (op[pc][0] == BNE) {
+        } else if (op_pc_0 == BNE) {
             //printf("bne\n");
             //if (reg[op[pc][1]] == reg[op[pc][2]]) printf("%d\n", reg[op[pc][1]]);
             if(reg[op[pc][1]] != reg[op[pc][2]]) {
@@ -181,7 +184,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 pc = search_label(label, strcat(temp, ":"));
                 continue;
             } 
-        } else if (op[pc][0] == BLT) {
+        } else if (op_pc_0 == BLT) {
             //printf("blt\n");
             if(reg[op[pc][1]] < reg[op[pc][2]]) {
                 char temp[100];
@@ -189,7 +192,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 pc = search_label(label, strcat(temp, ":"));
                 continue;
             } 
-        } else if (op[pc][0] == BLE) {
+        } else if (op_pc_0 == BLE) {
             //printf("ble\n");
             if(reg[op[pc][1]] <= reg[op[pc][2]]) {
                 char temp[100];
@@ -197,7 +200,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 pc = search_label(label, strcat(temp, ":"));
                 continue;
             } 
-        } else if (op[pc][0] == BGT) {
+        } else if (op_pc_0 == BGT) {
             //printf("bgt\n");
             if(reg[op[pc][1]] > reg[op[pc][2]]) {
                 char temp[100];
@@ -205,7 +208,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 pc = search_label(label, strcat(temp, ":"));
                 continue;
             } 
-        } else if (op[pc][0] == BGE) {
+        } else if (op_pc_0 == BGE) {
             //printf("bge\n");
             if(reg[op[pc][1]] >= reg[op[pc][2]]) {
                 char temp[100];
@@ -213,42 +216,42 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 pc = search_label(label, strcat(temp, ":"));
                 continue;
             } 
-        } else if (op[pc][0] == MOVE) {
+        } else if (op_pc_0 == MOVE) {
             //printf("move\n");
             reg[op[pc][1]] = reg[op[pc][2]];
-        } else if (op[pc][0] == MTC1) {
+        } else if (op_pc_0 == MTC1) {
             //printf("mtc1\n");
             u temp;
             temp.i = reg[op[pc][1]];
             f_reg[op[pc][2]] = temp.f;
-        } else if (op[pc][0] == MFC1) {
+        } else if (op_pc_0 == MFC1) {
             //printf("mfc1\n");
             u temp;
             temp.f = f_reg[op[pc][2]];
             reg[op[pc][1]] = temp.i;
-        } else if (op[pc][0] == J) {
+        } else if (op_pc_0 == J) {
             //printf("j\n");
             char temp[100];
             strcpy(temp, label[pc]);
             pc = search_label(label, strcat(temp, ":"));
             continue;
-        } else if (op[pc][0] == JR) {
+        } else if (op_pc_0 == JR) {
             //printf("jr\n");
             pc = reg[op[pc][1]]; 
             continue;
-        } else if (op[pc][0] == JAL) {
+        } else if (op_pc_0 == JAL) {
             //printf("jal\n");
             char temp[100];
             strcpy(temp, label[pc]);
             reg[31] = pc + 1;
             pc = search_label(label, strcat(temp, ":"));
             continue;
-        } else if (op[pc][0] == JALR) {
+        } else if (op_pc_0 == JALR) {
             //printf("jalr\n");
             reg[31] = pc + 1; 
             pc = reg[op[pc][1]]; 
             continue;
-        } else if (op[pc][0] == SYSCALL) {
+        } else if (op_pc_0 == SYSCALL) {
             //printf("syscall\n");
             if (reg[2] == 1) {
                 printf("%d", reg[4]);
@@ -279,77 +282,77 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 printf("atan\n");
                 f_reg[0] = atan(f_reg[0]);
             }
-        } else if (op[pc][0] == SLT) {
+        } else if (op_pc_0 == SLT) {
             //printf("slt\n");
             if(reg[op[pc][2]] < reg[op[pc][3]]) {
                 reg[op[pc][1]] = 1;
             } else { 
                 reg[op[pc][1]] = 0;
             }
-        } else if (op[pc][0] == SLL) {
+        } else if (op_pc_0 == SLL) {
             //printf("sll\n");
             reg[op[pc][1]] = reg[op[pc][2]] << op[pc][3];
-        } else if (op[pc][0] == SRL) {
+        } else if (op_pc_0 == SRL) {
             //printf("srl\n");
             reg[op[pc][1]] = reg[op[pc][2]] >> op[pc][3];
-        } else if (op[pc][0] == NEG) {
+        } else if (op_pc_0 == NEG) {
             //printf("neg\n");
             reg[op[pc][1]] = - reg[op[pc][2]];
-        } else if (op[pc][0] == ADDS) {
+        } else if (op_pc_0 == ADDS) {
             //printf("add.s\n");
             f_reg[op[pc][1]] =  f_reg[op[pc][2]] + f_reg[op[pc][3]];
-        } else if (op[pc][0] == SUBS) {
+        } else if (op_pc_0 == SUBS) {
             //printf("sub.s\n");
             f_reg[op[pc][1]] =  f_reg[op[pc][2]] - f_reg[op[pc][3]];
-        } else if (op[pc][0] == MULS) {
+        } else if (op_pc_0 == MULS) {
             //printf("mul.s\n");
             f_reg[op[pc][1]] =  f_reg[op[pc][2]] * f_reg[op[pc][3]];
-        } else if (op[pc][0] == DIVS) {
+        } else if (op_pc_0 == DIVS) {
             //printf("div.s\n");
             f_reg[op[pc][1]] =  f_reg[op[pc][2]] / f_reg[op[pc][3]];
-        } else if (op[pc][0] == ABSS) {
+        } else if (op_pc_0 == ABSS) {
             //printf("abs.s\n");
             f_reg[op[pc][1]] =  abs(f_reg[op[pc][2]]);
-        } else if (op[pc][0] == NEGS) {
+        } else if (op_pc_0 == NEGS) {
             //printf("neg.s\n");
             f_reg[op[pc][1]] =  - f_reg[op[pc][2]];
-        } else if (op[pc][0] == FLOORWS) {
+        } else if (op_pc_0 == FLOORWS) {
             //printf("floor.w.s\n");
             u temp;
             temp.i = (int)floor(f_reg[op[pc][2]]);
             f_reg[op[pc][1]] = temp.f;
-        } else if (op[pc][0] == SQRTS) {
+        } else if (op_pc_0 == SQRTS) {
             //printf("sqrt.s\n");
             f_reg[op[pc][1]] =  sqrt(f_reg[op[pc][2]]);
-        } else if (op[pc][0] == MOVS) {
+        } else if (op_pc_0 == MOVS) {
             //printf("mov.s\n");
             f_reg[op[pc][1]] =  f_reg[op[pc][2]];
-        } else if (op[pc][0] == CVTSW) {
+        } else if (op_pc_0 == CVTSW) {
             //printf("cvt.s.w\n");
             u temp;
             temp.f = f_reg[op[pc][2]];
             f_reg[op[pc][1]] = (float) temp.i; 
-        } else if (op[pc][0] == CVTWS) {
+        } else if (op_pc_0 == CVTWS) {
             //printf("cvt.w.s\n");
             //printf("%f\n", f_reg[op[pc][2]]);
             u temp;
             temp.i = (int) f_reg[op[pc][2]];
             f_reg[op[pc][1]] = temp.f; 
-        } else if (op[pc][0] == TRUNCWS) {
+        } else if (op_pc_0 == TRUNCWS) {
             //printf("trunc.w.s\n");
             u temp;
             temp.i = (int) f_reg[op[pc][2]];
             f_reg[op[pc][1]] = temp.f; 
-        } else if (op[pc][0] == CEQS) {
+        } else if (op_pc_0 == CEQS) {
             //printf("c.eq.s\n");
             condition_bit = (f_reg[op[pc][1]] == f_reg[op[pc][2]]);
-        } else if (op[pc][0] == CLES) {
+        } else if (op_pc_0 == CLES) {
             //printf("c.le.s\n");
             condition_bit = (f_reg[op[pc][1]] < f_reg[op[pc][2]]);
-        } else if (op[pc][0] == CLTS) {
+        } else if (op_pc_0 == CLTS) {
             //printf("c.lt.s\n");
             condition_bit = (f_reg[op[pc][1]] <= f_reg[op[pc][2]]);
-        } else if (op[pc][0] == BC1T) {
+        } else if (op_pc_0 == BC1T) {
             //printf("bc1t\n");
             if (condition_bit == 1) {
                 char temp[100];
@@ -357,7 +360,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 pc = search_label(label, strcat(temp, ":")); 
                 continue;
             }
-        } else if (op[pc][0] == BC1F) {
+        } else if (op_pc_0 == BC1F) {
             //printf("bc1f\n");
             if (condition_bit == 0) {
                 char temp[100];
@@ -365,7 +368,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 continue;
             }
         } 
-        if (break_bit || op[pc][0] == BREAK) { // This instruction is not in mips!!
+        if (break_bit || op_pc_0 == BREAK) { // This instruction is not in mips!!
             //printf("break\n");
             int temp;
             break_bit = 1;
