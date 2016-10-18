@@ -8,7 +8,7 @@
 #include <math.h>
 #include <assert.h>
 
-#define label_cache_size 4
+#define label_cache_size 60
 
 typedef union {
     int32_t i;
@@ -27,7 +27,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     f = fopen("register.log", "w"); 
 
     int32_t reg[32];
-    reg[29] = MEM_SIZE / 2;
+    reg[28] = MEM_SIZE / 2;
     float f_reg[32];
     int32_t hi, lo;
     int32_t mem[MEM_SIZE];
