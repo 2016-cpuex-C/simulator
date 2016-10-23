@@ -22,26 +22,60 @@ int num;
 char* str;
 }
 
-%type <num> ADD ADDI ADDU ADDIU SUB SUBI SUBU MUL MULT DIV MFHI MFLO
-%type <num> ANDI
-%type <num> LI LA
-%type <num> LW SW
-%type <num> LS SS
-%type <num> LD SD
-%type <num> B BEQ BNE BLT BLE BGT BGE BEQZ BNEZ BLTZ BLEZ BGTZ BGEZ
+
+%type <num> MOVE
+%type <num> NEG
+%type <num> ADD
+%type <num> ADDI
+%type <num> SUB
+%type <num> SUBI
+%type <num> MULT
+%type <num> MULTI
+%type <num> DIV
+%type <num> DIVI
+%type <num> MOVS
+%type <num> NEGS
+%type <num> ADDS
+%type <num> SUBS
+%type <num> MULS
+%type <num> DIVS
+%type <num> SRL
+%type <num> SLL
+%type <num> LI
+%type <num> LA
+%type <num> LWL
+%type <num> LWR
+%type <num> LSL
+%type <num> LSR
+%type <num> SW
+%type <num> SS
+%type <num> BEQ
+%type <num> BNE
+%type <num> BLT
+%type <num> BGT
+%type <num> CEQS
+%type <num> CLES
+%type <num> CLTS
+%type <num> J
+%type <num> JR
+%type <num> JAL
+%type <num> JALR
+%type <num> PRINTI
+%type <num> PRINTF
+%type <num> PRINTC
+%type <num> READI
+%type <num> READF
+%type <num> SIN
+%type <num> COS
+%type <num> ATAN
+%type <num> FLOOR
+%type <num> SQRT
+%type <num> FTOI
+%type <num> ITOF
 %type <num> EXIT
-%type <num> MOVE MTC1 MFC1
-%type <num> J JR JAL JALR
-%type <num> SYSCALL
-%type <num> SLT
-%type <num> SLL SRL NEG
-%type <num> ADDS SUBS MULS DIVS ABSS NEGS FLOORWS SQRTS
-%type <num> MOVS 
-%type <num> CVTWS CVTSW TRUNCWS 
-%type <num> CEQS CLES CLTS BC1T BC1F
-%type <num> BREAK 
-%type <num> ADDD SUBD MULD DIVD
-%type <num> MOVD
+%type <num> BREAK
+
+
 
 %type <num> ENTER
 %type <str> LABEL
@@ -54,26 +88,66 @@ char* str;
 %type <num> IMMEDIATE REGISTER F_REGISTER
 %start list
 
-%token ADD ADDI ADDU ADDIU SUB SUBI SUBU MUL MULT DIV MFHI MFLO
-%token ANDI
-%token LI LA
-%token LW SW
-%token LS SS
-%token LD SD
-%token B BEQ BNE BLT BLE BGT BGE BEQZ BNEZ BLTZ BLEZ BGTZ BGEZ
-%token EXIT 
-%token MOVE MTC1 MFC1
-%token J JR JAL JALR
-%token SYSCALL
-%token SLT
-%token SLL SRL NEG
-%token ADDS SUBS MULS DIVS ABSS NEGS FLOORWS SQRTS
-%token MOVS 
-%token CVTWS CVTSW TRUNCWS 
-%token CEQS CLES CLTS BC1T BC1F
-%token BREAK 
-%token ADDD SUBD MULD DIVD
-%token MOVD
+
+
+
+
+
+%token MOVE
+%token NEG
+%token ADD
+%token ADDI
+%token SUB
+%token SUBI
+%token MULT
+%token MULTI
+%token DIV
+%token DIVI
+%token MOVS
+%token NEGS
+%token ADDS
+%token SUBS
+%token MULS
+%token DIVS
+%token SRL
+%token SLL
+%token LI
+%token LA
+%token LWL
+%token LWR
+%token LSL
+%token LSR
+%token SW
+%token SS
+%token BEQ
+%token BNE
+%token BLT
+%token BGT
+%token CEQS
+%token CLES
+%token CLTS
+%token J
+%token JR
+%token JAL
+%token JALR
+%token PRINTI
+%token PRINTF
+%token PRINTC
+%token READI
+%token READF
+%token SIN
+%token COS
+%token ATAN
+%token FLOOR
+%token SQRT
+%token FTOI
+%token ITOF
+%token EXIT
+%token BREAK
+
+
+
+
 
 %token ENTER
 %token STRING
@@ -144,618 +218,261 @@ stat:
             inner_lc = 0;
          }
          |  
-         ADD REGISTER REGISTER REGISTER  
-         {
+
+
+
+
+         MOVE REGISTER REGISTER  {
+            fprintf(f, " move");
+            op[pc][0] = MOVE; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         NEG REGISTER REGISTER {
+            fprintf(f, " neg");
+            op[pc][0] = NEG; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         ADD REGISTER REGISTER REGISTER  {
             fprintf(f, " add");
-            op[pc][0] = ADD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
+            op[pc][0] = ADD; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         ADDI REGISTER REGISTER IMMEDIATE  
-         {
+         ADDI REGISTER REGISTER IMMEDIATE  {
             fprintf(f, " addi");
-            op[pc][0] = ADDI;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
+            op[pc][0] = ADDI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         ADDU REGISTER REGISTER REGISTER  
-         {
-            fprintf(f, " addu");
-            op[pc][0] = ADDU;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         ADDIU REGISTER REGISTER IMMEDIATE  
-         {
-            fprintf(f, " addiu");
-            op[pc][0] = ADDIU;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         SUB REGISTER REGISTER REGISTER  
-         {
+         SUB REGISTER REGISTER REGISTER  {
             fprintf(f, " sub");
-            op[pc][0] = SUB;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
+            op[pc][0] = SUB; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         SUBI REGISTER REGISTER IMMEDIATE  
-         {
+         SUBI REGISTER REGISTER IMMEDIATE  {
             fprintf(f, " subi");
-            op[pc][0] = SUBI;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
+            op[pc][0] = SUBI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         SUBU REGISTER REGISTER REGISTER  
-         {
-            fprintf(f, " subu");
-            op[pc][0] = SUBU;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         MULT REGISTER REGISTER  
-         {
+         MULT REGISTER REGISTER REGISTER {
             fprintf(f, " mult");
-            op[pc][0] = MULT;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
+            op[pc][0] = MULT; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         DIV REGISTER REGISTER  
-         {
+         MULTI REGISTER REGISTER IMMEDIATE {
+            fprintf(f, " multi");
+            op[pc][0] = MULTI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+         }
+         |
+         DIV REGISTER REGISTER REGISTER {
             fprintf(f, " div");
-            op[pc][0] = DIV;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
+            op[pc][0] = DIV; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         MUL REGISTER REGISTER REGISTER  
-         {
-            fprintf(f, " mul");
-            op[pc][0] = MUL;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
+         DIVI REGISTER REGISTER IMMEDIATE {
+            fprintf(f, " divi");
+            op[pc][0] = DIVI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         MFLO REGISTER  
-         {
-            fprintf(f, " mflo");
-            op[pc][0] = MFLO;
-            op[pc][1] = $2;
+         MOVS F_REGISTER F_REGISTER {
+            fprintf(f, " mov.s");
+            op[pc][0] = MOVS; op[pc][1] = $2; op[pc][2] = $3;
          }
          |
-         MFHI REGISTER  
-         {
-            fprintf(f, " mfhi");
-            op[pc][0] = MFHI;
-            op[pc][1] = $2;
+         NEGS F_REGISTER F_REGISTER {
+            fprintf(f, " neg.s");
+            op[pc][0] = NEGS; op[pc][1] = $2; op[pc][2] = $3;
          }
          |
-         ANDI REGISTER REGISTER IMMEDIATE
-         {
-            fprintf(f, " andi");
-            op[pc][0] = ANDI;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
+         ADDS F_REGISTER F_REGISTER F_REGISTER {
+            fprintf(f, " add.s");
+            op[pc][0] = ADDS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         LI REGISTER IMMEDIATE  
-         {
+         SUBS F_REGISTER F_REGISTER F_REGISTER {
+            fprintf(f, " sub.s");
+            op[pc][0] = SUBS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+         }
+         |
+         MULS F_REGISTER F_REGISTER F_REGISTER {
+            fprintf(f, " mul.s");
+            op[pc][0] = MULS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+         }
+         | 
+         DIVS F_REGISTER F_REGISTER F_REGISTER {
+            fprintf(f, " div.s");
+            op[pc][0] = DIVS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+         }
+         | 
+         SRL REGISTER REGISTER IMMEDIATE {
+            fprintf(f, " srl");
+            op[pc][0] = SRL; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+         }
+         |
+         SLL REGISTER REGISTER IMMEDIATE {
+            fprintf(f, " sll");
+            op[pc][0] = SLL; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+         }
+         |
+         LI REGISTER IMMEDIATE  {
             fprintf(f, " li");
-            op[pc][0] = LI;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
+            op[pc][0] = LI; op[pc][1] = $2; op[pc][2] = $3;
          }
          |
-         LA REGISTER LABEL  
-         {
+         LA REGISTER LABEL  {
             fprintf(f, " la");
-            op[pc][0] = LA;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
+            op[pc][0] = LA; op[pc][1] = $2; strcpy(label[pc], $3); 
          }
          |
-         LS F_REGISTER LABEL  
-         {
-            fprintf(f, " ls");
-            op[pc][0] = LS;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            op[pc][3] = -3;
+         LWL REGISTER LABEL  {
+            fprintf(f, " lwl");
+            op[pc][0] = LWL; op[pc][1] = $2; strcpy(label[pc], $3);
          }
          |
-         LS F_REGISTER REGISTER  
-         {
-            fprintf(f, " ls");
-            op[pc][0] = LS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = -1;
+         LWR REGISTER IMMEDIATE REGISTER  {
+            fprintf(f, " lwr");
+            op[pc][0] = LWR; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         LS F_REGISTER IMMEDIATE REGISTER  
-         {
-            fprintf(f, " ls");
-            op[pc][0] = LS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
+         LSL F_REGISTER LABEL  {
+            fprintf(f, " l.sl");
+            op[pc][0] = LSL; op[pc][1] = $2; strcpy(label[pc], $3);
          }
          |
-         SS F_REGISTER REGISTER  
-         {
+         LSR F_REGISTER IMMEDIATE REGISTER  {
+            fprintf(f, " l.sr");
+            op[pc][0] = LSR; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; 
+         }
+         |
+         SW REGISTER IMMEDIATE REGISTER  {
+            fprintf(f, " sw");
+            op[pc][0] = SW; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+         }
+         |
+         SS F_REGISTER IMMEDIATE REGISTER  {
             fprintf(f, " ss");
-            op[pc][0] = SS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = -1;
+            op[pc][0] = SS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
          }
          |
-         SS F_REGISTER IMMEDIATE REGISTER  
-         {
-            fprintf(f, " ss");
-            op[pc][0] = SS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         LD F_REGISTER REGISTER  
-         {
-            fprintf(f, " ld");
-            op[pc][0] = LD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = -1;
-         }
-         |
-         LD F_REGISTER IMMEDIATE REGISTER  
-         {
-            fprintf(f, " ld");
-            op[pc][0] = LD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         SD F_REGISTER REGISTER  
-         {
-            fprintf(f, " sw");
-            op[pc][0] = SD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = -1;
-         }
-         |
-         SD F_REGISTER IMMEDIATE REGISTER  
-         {
-            fprintf(f, " sd");
-            op[pc][0] = SD;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         LW REGISTER LABEL  
-         {
-            fprintf(f, " lw");
-            op[pc][0] = LW;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            op[pc][3] = -3;
-         }
-         |
-         LW REGISTER REGISTER  
-         {
-            fprintf(f, " lw");
-            op[pc][0] = LW;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = -1;
-         }
-         |
-         LW REGISTER IMMEDIATE REGISTER  
-         {
-            fprintf(f, " lw");
-            op[pc][0] = LW;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         SW REGISTER REGISTER  
-         {
-            fprintf(f, " sw");
-            op[pc][0] = SW;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = -1;
-         }
-         |
-         SW REGISTER IMMEDIATE REGISTER  
-         {
-            fprintf(f, " sw");
-            op[pc][0] = SW;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         B LABEL  
-         {
-            fprintf(f, " b");
-            op[pc][0] = B;
-            strcpy(label[pc], $2); 
-         }
-         |
-         BEQ REGISTER REGISTER LABEL
-         {
+         BEQ REGISTER REGISTER LABEL {
             fprintf(f, " beq");
-            op[pc][0] = BEQ;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            strcpy(label[pc], $4); 
-            
+            op[pc][0] = BEQ; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4); 
          }
          |
-         BNE REGISTER REGISTER LABEL
-         {
+         BNE REGISTER REGISTER LABEL {
             fprintf(f, " bne");
-            op[pc][0] = BNE;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            strcpy(label[pc], $4); 
-            
+            op[pc][0] = BNE; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4); 
          }
          |
-         BLT REGISTER REGISTER LABEL
-         {
+         BLT REGISTER REGISTER LABEL {
             fprintf(f, " blt");
-            op[pc][0] = BLT;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            strcpy(label[pc], $4); 
-            
+            op[pc][0] = BLT; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4); 
          }
          |
-         BLE REGISTER REGISTER LABEL
-         {
-            fprintf(f, " ble");
-            op[pc][0] = BLE;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            strcpy(label[pc], $4); 
-            
-         }
-         |
-         BGT REGISTER REGISTER LABEL
-         {
+         BGT REGISTER REGISTER LABEL {
             fprintf(f, " bgt");
-            op[pc][0] = BGT;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            strcpy(label[pc], $4); 
-            
+            op[pc][0] = BGT; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4); 
          }
          |
-         BGE REGISTER REGISTER LABEL
-         {
-            fprintf(f, " bge");
-            op[pc][0] = BGE;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            strcpy(label[pc], $4); 
-            
+         CEQS F_REGISTER F_REGISTER {
+            fprintf(f, " c.eq.s");
+            op[pc][0] = CEQS; op[pc][1] = $2; op[pc][2] = $3;
          }
          |
-         BEQZ REGISTER LABEL
-         {
-            fprintf(f, " beqz");
-            op[pc][0] = BEQZ;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            
+         CLES F_REGISTER F_REGISTER {
+            fprintf(f, " c.le.s");
+            op[pc][0] = CLES; op[pc][1] = $2; op[pc][2] = $3;
          }
          |
-         BNEZ REGISTER LABEL
-         {
-            fprintf(f, " bnez");
-            op[pc][0] = BNEZ;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            
+         CLTS F_REGISTER F_REGISTER {
+            fprintf(f, " c.lt.s");
+            op[pc][0] = CLTS; op[pc][1] = $2; op[pc][2] = $3;
          }
          |
-         BGEZ REGISTER LABEL
-         {
-            fprintf(f, " bgez");
-            op[pc][0] = BGEZ;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            
+         J LABEL  {
+            fprintf(f, " j");
+            op[pc][0] = J; strcpy(label[pc], $2); 
          }
          |
-         BGTZ REGISTER LABEL
-         {
-            fprintf(f, " bgtz");
-            op[pc][0] = BGTZ;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            
+         JR REGISTER {
+            fprintf(f, " jr");
+            op[pc][0] = JR; op[pc][1] = $2;
          }
          |
-         BLEZ REGISTER LABEL
-         {
-            fprintf(f, " blez");
-            op[pc][0] = BLEZ;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            
+         JAL LABEL {
+            fprintf(f, " jal");
+            op[pc][0] = JAL; strcpy(label[pc], $2); 
          }
          |
-         BLTZ REGISTER LABEL
-         {
-            fprintf(f, " bltz");
-            op[pc][0] = BLTZ;
-            op[pc][1] = $2;
-            strcpy(label[pc], $3); 
-            
+         JALR REGISTER {
+            fprintf(f, " jalr");
+            op[pc][0] = JALR; op[pc][1] = $2;
          }
          |
-         EXIT  
-         {
+         PRINTI REGISTER {
+            fprintf(f, " print_i");
+            op[pc][0] = PRINTI; op[pc][1] = $2;
+         }
+         |
+         PRINTF F_REGISTER {
+            fprintf(f, " print_f");
+            op[pc][0] = PRINTF; op[pc][1] = $2;
+         }
+         |
+         PRINTC REGISTER {
+            fprintf(f, " print_c");
+            op[pc][0] = PRINTC; op[pc][1] = $2;
+         }
+         |
+         READI REGISTER {
+            fprintf(f, " read_i");
+            op[pc][0] = READI; op[pc][1] = $2;
+         }
+         |
+         READF F_REGISTER {
+            fprintf(f, " read_f");
+            op[pc][0] = READF; op[pc][1] = $2;
+         }
+         |
+         SIN F_REGISTER F_REGISTER {
+            fprintf(f, " sin");
+            op[pc][0] = SIN; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         COS F_REGISTER F_REGISTER {
+            fprintf(f, " cos");
+            op[pc][0] = COS; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         ATAN F_REGISTER F_REGISTER {
+            fprintf(f, " atan");
+            op[pc][0] = ATAN; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         FLOOR F_REGISTER F_REGISTER {
+            fprintf(f, " floor");
+            op[pc][0] = FLOOR; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         SQRT F_REGISTER F_REGISTER {
+            fprintf(f, " sqrt");
+            op[pc][0] = SQRT; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         FTOI REGISTER F_REGISTER {
+            fprintf(f, " ftoi");
+            op[pc][0] = FTOI; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         ITOF F_REGISTER REGISTER {
+            fprintf(f, " itof");
+            op[pc][0] = ITOF; op[pc][1] = $2; op[pc][2] = $3;
+         }
+         |
+         EXIT  {
             fprintf(f, " exit");
             op[pc][0] = EXIT;
          }
          |
-         MOVE REGISTER REGISTER  
-         {
-            fprintf(f, " move");
-            op[pc][0] = MOVE;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         MTC1 REGISTER F_REGISTER
-         {
-            fprintf(f, " mtc1");
-            op[pc][0] = MTC1;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         MFC1 REGISTER F_REGISTER
-         {
-            fprintf(f, " mfc1");
-            op[pc][0] = MFC1;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         J LABEL  
-         {
-            fprintf(f, " j");
-            op[pc][0] = J;
-            strcpy(label[pc], $2); 
-         }
-         |
-         JR REGISTER 
-         {
-            fprintf(f, " jr");
-            op[pc][0] = JR;
-            op[pc][1] = $2;
-         }
-         |
-         JAL LABEL 
-         {
-            fprintf(f, " jal");
-            op[pc][0] = JAL;
-            strcpy(label[pc], $2); 
-         }
-         |
-         JALR REGISTER 
-         {
-            fprintf(f, " jalr");
-            op[pc][0] = JALR;
-            op[pc][1] = $2;
-         }
-         |
-         SYSCALL
-         {
-            fprintf(f, " syscall");
-            op[pc][0] = SYSCALL;
-         }
-         |
-         SLT REGISTER REGISTER REGISTER 
-         {
-            fprintf(f, " slt");
-            op[pc][0] = SLT;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         SLL REGISTER REGISTER IMMEDIATE 
-         {
-            fprintf(f, " sll");
-            op[pc][0] = SLL;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         SRL REGISTER REGISTER IMMEDIATE 
-         {
-            fprintf(f, " srl");
-            op[pc][0] = SRL;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         NEG REGISTER REGISTER 
-         {
-            fprintf(f, " neg");
-            op[pc][0] = NEG;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         ADDS F_REGISTER F_REGISTER F_REGISTER
-         {
-            fprintf(f, " add.s");
-            op[pc][0] = ADDS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         SUBS F_REGISTER F_REGISTER F_REGISTER
-         {
-            fprintf(f, " sub.s");
-            op[pc][0] = SUBS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         |
-         MULS F_REGISTER F_REGISTER F_REGISTER
-         {
-            fprintf(f, " mul.s");
-            op[pc][0] = MULS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         | 
-         DIVS F_REGISTER F_REGISTER F_REGISTER
-         {
-            fprintf(f, " div.s");
-            op[pc][0] = DIVS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-            op[pc][3] = $4;
-         }
-         | 
-         ABSS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " abs.s");
-            op[pc][0] = ABSS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         NEGS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " neg.s");
-            op[pc][0] = NEGS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         FLOORWS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " floor.w.s");
-            op[pc][0] = FLOORWS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         SQRTS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " sqrt.s");
-            op[pc][0] = SQRTS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         MOVS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " mov.s");
-            op[pc][0] = MOVS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         CVTWS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " cvt.w.s");
-            op[pc][0] = CVTWS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         CVTSW F_REGISTER F_REGISTER
-         {
-            fprintf(f, " cvt.s.w");
-            op[pc][0] = CVTSW;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         TRUNCWS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " trunc.w.s");
-            op[pc][0] = TRUNCWS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         CEQS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " c.eq.s");
-            op[pc][0] = CEQS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         CLES F_REGISTER F_REGISTER
-         {
-            fprintf(f, " c.le.s");
-            op[pc][0] = CLES;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         CLTS F_REGISTER F_REGISTER
-         {
-            fprintf(f, " c.lt.s");
-            op[pc][0] = CLTS;
-            op[pc][1] = $2;
-            op[pc][2] = $3;
-         }
-         |
-         BC1T LABEL
-         {
-            fprintf(f, " bc1t");
-            op[pc][0] = BC1T;
-            strcpy(label[pc], $2); 
-         }
-         |
-         BC1F LABEL
-         {
-            fprintf(f, " bc1f");
-            op[pc][0] = BC1F;
-            strcpy(label[pc], $2); 
-         }
-         |
-         BREAK 
-         {
+         BREAK {
             fprintf(f, " break");
             op[pc][0] = BREAK;
          }
@@ -763,18 +480,6 @@ stat:
 %%
 main(int argc, char *argv[])
 {
-
-////    int (* op)[5];
-//    op = malloc(sizeof(int) * MEM_SIZE * 5);
-//    
-//  //      char (* label)[MAX_STR];
-//    label = malloc(sizeof(char) * 2 * MEM_SIZE * MAX_STR);
-//
-//   //     char (* string)[MAX_STR];
-//    string = malloc(sizeof(char) * MEM_SIZE * MAX_STR);
-//
-//    //    int32_t (* word)[MAX_STR];
-//    word = malloc(sizeof(int32_t) * 2 * MEM_SIZE * MAX_STR);
 
     FILE *fh;
     if (argc == 2 && (fh = fopen(argv[1], "r"))) {
