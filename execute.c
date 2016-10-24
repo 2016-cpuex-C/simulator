@@ -23,7 +23,7 @@ int search_label (char label[MEM_SIZE][MAX_STR], char *str);
 void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char string[MEM_SIZE][MAX_STR], int32_t word[2 * MEM_SIZE][MAX_STR], char *option)
 {
     FILE *f;
-    f = fopen("register.log", "w"); 
+    //f = fopen("register.log", "w"); 
 
     int32_t reg[32];
     reg[28] = MEM_SIZE / 2;
@@ -45,7 +45,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
 
     while (1){
 
-        log_main (f, pc, reg, f_reg, hi, lo, mem, option);
+        //log_main (f, pc, reg, f_reg, hi, lo, mem, option);
 
         op_pc_0 = op[pc][0];
 
@@ -342,7 +342,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         
     }
     
-    fclose(f);
+    //fclose(f);
    
     //analyze_how_many_times_called(op, how_many_times_called);
 
