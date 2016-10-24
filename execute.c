@@ -248,13 +248,28 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             } 
         } else if (op_pc_0 == CEQS) {
             //printf("c.eq.s\n");
-            condition_bit = (f_reg[op[pc][1]] == f_reg[op[pc][2]]);
+            if(f_reg[op[pc][1]] == f_reg[op[pc][2]]) {
+                char temp[100];
+                strcpy(temp, label[pc]);
+                pc = search_label(label, strcat(temp, ":"));
+                continue;
+            } 
         } else if (op_pc_0 == CLES) {
             //printf("c.le.s\n");
-            condition_bit = (f_reg[op[pc][1]] <= f_reg[op[pc][2]]);
+            if(f_reg[op[pc][1]] <= f_reg[op[pc][2]]) {
+                char temp[100];
+                strcpy(temp, label[pc]);
+                pc = search_label(label, strcat(temp, ":"));
+                continue;
+            } 
         } else if (op_pc_0 == CLTS) {
             //printf("c.lt.s\n");
-            condition_bit = (f_reg[op[pc][1]] < f_reg[op[pc][2]]);
+            if(f_reg[op[pc][1]] < f_reg[op[pc][2]]) {
+                char temp[100];
+                strcpy(temp, label[pc]);
+                pc = search_label(label, strcat(temp, ":"));
+                continue;
+            } 
         } else if (op_pc_0 == J) {
             //printf("j\n");
             char temp[100];

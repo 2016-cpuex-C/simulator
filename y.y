@@ -372,19 +372,19 @@ stat:
             op[pc][0] = BGT; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4); 
          }
          |
-         CEQS F_REGISTER F_REGISTER {
+         CEQS F_REGISTER F_REGISTER LABEL{
             fprintf(f, " c.eq.s");
-            op[pc][0] = CEQS; op[pc][1] = $2; op[pc][2] = $3;
+            op[pc][0] = CEQS; op[pc][1] = $2; op[pc][2] = $3;strcpy(label[pc], $4);
          }
          |
-         CLES F_REGISTER F_REGISTER {
+         CLES F_REGISTER F_REGISTER LABEL{
             fprintf(f, " c.le.s");
-            op[pc][0] = CLES; op[pc][1] = $2; op[pc][2] = $3;
+            op[pc][0] = CLES; op[pc][1] = $2; op[pc][2] = $3;strcpy(label[pc], $4);
          }
          |
-         CLTS F_REGISTER F_REGISTER {
+         CLTS F_REGISTER F_REGISTER LABEL{
             fprintf(f, " c.lt.s");
-            op[pc][0] = CLTS; op[pc][1] = $2; op[pc][2] = $3;
+            op[pc][0] = CLTS; op[pc][1] = $2; op[pc][2] = $3;strcpy(label[pc], $4);
          }
          |
          J LABEL  {
