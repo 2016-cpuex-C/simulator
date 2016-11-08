@@ -1,6 +1,7 @@
 #include "y.tab.h"
 #include "log.c" 
 #include "global.h" 
+#include "analyze.c" 
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -37,7 +38,10 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         mem[i] = INT_MAX;  //initialilze all memory to int_max. to detect invalid memory access
     }
 
-    int how_many_times_called[MEM_SIZE];
+    long int how_many_times_called[MEM_SIZE];
+    for (i = 0; i < MEM_SIZE; i++) {
+        how_many_times_called[i] = 0;
+    }
 
     int pc = search_label(label, "main:");
 
@@ -337,14 +341,14 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             break;
         } 
        
-        //how_many_times_called[pc] += 1;
+        how_many_times_called[pc] += 1;
         pc += 1;
         
     }
     
     //fclose(f);
    
-    //analyze_how_many_times_called(op, how_many_times_called);
+    analyze_how_many_times_called(op, how_many_times_called);
 
     return;
     
