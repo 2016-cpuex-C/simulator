@@ -303,7 +303,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (break_bit) {
                 printf("lwr\n");
             }
-            assert (reg[op[pc][2]] + op[pc][3] < MEM_SIZE);
+            assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);
             reg[op[pc][1]] = mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])];
         } else if (op_pc_0 == LSL) {
             if (break_bit) {
@@ -317,14 +317,14 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 printf("l.sr\n");
             }
             u temp;
-            assert (reg[op[pc][2]] + op[pc][3] < MEM_SIZE);
+            assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);
             temp.i = mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])];
             f_reg[op[pc][1]] = temp.f;
         } else if (op_pc_0 == SW) {
             if (break_bit) {
                 printf("sw\n");
             }
-            assert (reg[op[pc][2]] + op[pc][3] < MEM_SIZE);
+            assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);
             mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = reg[op[pc][1]];
         } else if (op_pc_0 == SS) {
             if (break_bit) {
@@ -332,7 +332,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             }
             u temp;
             temp.f = f_reg[op[pc][1]]; 
-            assert (reg[op[pc][2]] + op[pc][3] < MEM_SIZE);
+            assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);
             mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = temp.i; 
         } else if (op_pc_0 == BEQ) {
             if (break_bit) {
@@ -494,7 +494,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     
     //fclose(f);
    
-    analyze_how_many_times_called(op, how_many_times_called);
+    analyze_how_many_times_called(op, how_many_times_called, label);
 
     return;
     
