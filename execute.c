@@ -518,6 +518,7 @@ int search_label (char label[MEM_SIZE][MAX_STR], char *str)
         }
         if (i == 999999) {
             printf("label not found\n");
+            printf("%s\n", str);
             exit(0);
         }
     }
