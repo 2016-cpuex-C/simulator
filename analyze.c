@@ -278,7 +278,7 @@ analyze_how_many_times_called(int op[MEM_SIZE][5], long int how_many_times_calle
     fprintf(f, "label count\n");
     for(i = 0; i < MEM_SIZE; i++) {
         if(strstr(label[i], ":") && strcmp(label[i], "\0") != 0 && how_many_times_called[i] != 0) {
-            fprintf(f, "%'ld  ", how_many_times_called[i]);
+            fprintf(f, "%'12ld  ", how_many_times_called[i]);
             fprintf(f, "%s  \n", label[i]);
         }
     }
