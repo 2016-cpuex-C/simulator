@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include "global.h" 
 
-analyze_how_many_times_called(int op[MEM_SIZE][5], long int how_many_times_called[MEM_SIZE], char label[2 * MEM_SIZE][MAX_STR]) {
+analyze_how_many_times_called(int op[MEM_SIZE][5], long int how_many_times_called[MEM_SIZE], int max_stack_dept, int used_heap_size, char label[2 * MEM_SIZE][MAX_STR]) {
     
     long int i, dynamic_count;
     int op_pc_0;
@@ -20,6 +20,8 @@ analyze_how_many_times_called(int op[MEM_SIZE][5], long int how_many_times_calle
     }
     setlocale(LC_NUMERIC, "");
     fprintf(f, "%'ld :number of dynamic instructions\n", dynamic_count);
+    fprintf(f, "%d :max stack dept\n", max_stack_dept);
+    fprintf(f, "%'d :used heap size\n", used_heap_size);
     fprintf(f, "\n");
     for (op_pc_0 = 0; op_pc_0 < 500; op_pc_0++) {
         if (op_pc_0 == MOVE) {
@@ -274,6 +276,7 @@ analyze_how_many_times_called(int op[MEM_SIZE][5], long int how_many_times_calle
             }
         } 
     }
+
     fprintf(f, "\n\n");
     fprintf(f, "label count\n");
     for(i = 0; i < MEM_SIZE; i++) {

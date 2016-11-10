@@ -114,9 +114,15 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             op[i][3] = search_label(label, strcat(temp, ":"));
         }
     }
-
+    
+    int max_stack_dept, used_heap_size;
+    max_stack_dept = 0;
+    used_heap_size = reg[28];
 
     while (1){
+        if (max_stack_dept < reg[29]) {
+            max_stack_dept = reg[29];
+        }
 
         //log_main (f, pc, reg, f_reg, hi, lo, mem, option);
 
@@ -493,8 +499,10 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     }
     
     //fclose(f);
+
+    used_heap_size = reg[28] - used_heap_size;
    
-    analyze_how_many_times_called(op, how_many_times_called, label);
+    analyze_how_many_times_called(op, how_many_times_called, max_stack_dept, used_heap_size, label);
 
     return;
     
