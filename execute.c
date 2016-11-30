@@ -127,6 +127,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         //log_main (f, pc, reg, f_reg, hi, lo, mem, option);
 
         op_pc_0 = op[pc][0];
+        how_many_times_called[pc] += 1;
 
         if (break_bit || op_pc_0 == BREAK) { // This instruction is not in mips!!
             //printf("break\n");
@@ -493,7 +494,6 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             break;
         } 
        
-        how_many_times_called[pc] += 1;
         pc += 1;
         
     }
