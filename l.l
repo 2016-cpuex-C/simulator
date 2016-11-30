@@ -178,6 +178,7 @@ sqrt        {return(SQRT);}
 ftoi        {return(FTOI);}
 itof        {return(ITOF);}
 exit        {return(EXIT);}
+print_b     {return(PRINTB);}
 break       {return(BREAK); }
 
  /*andi        {return(ANDI); }

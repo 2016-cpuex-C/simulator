@@ -10,8 +10,7 @@
 
 #define label_cache_size 60
 
-typedef union {
-    int32_t i;
+typedef union { int32_t i;
     float f;
     uint32_t ui;
 } u;
@@ -492,6 +491,11 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 printf("exit\n");
             }
             break;
+        } else if (op_pc_0 == PRINTB) {
+            if (break_bit) {
+                printf("print_b\n");
+            }
+            printf("%02hhX", reg[op[pc][1]]);
         } 
        
         pc += 1;

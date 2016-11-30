@@ -73,6 +73,7 @@ char* str;
 %type <num> FTOI
 %type <num> ITOF
 %type <num> EXIT
+%type <num> PRINTB
 %type <num> BREAK
 
 
@@ -143,6 +144,7 @@ char* str;
 %token FTOI
 %token ITOF
 %token EXIT
+%token PRINTB
 %token BREAK
 
 
@@ -470,6 +472,11 @@ stat:
          EXIT  {
             fprintf(f, " exit");
             op[pc][0] = EXIT;
+         }
+         |
+         PRINTB REGISTER {
+            fprintf(f, " print_b");
+            op[pc][0] = PRINTB; op[pc][1] = $2;
          }
          |
          BREAK {
