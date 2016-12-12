@@ -1,7 +1,7 @@
 #include "y.tab.h"
-#include "log.c" 
-#include "global.h" 
-#include "analyze.c" 
+#include "log.c"
+#include "global.h"
+#include "analyze.c"
 #include <stdlib.h>
 #include <stdio.h>
 #include <stdint.h>
@@ -24,7 +24,7 @@ int search_label (char label[MEM_SIZE][MAX_STR], char *str);
 void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char string[MEM_SIZE][MAX_STR], int32_t word[2 * MEM_SIZE][MAX_STR], char *option)
 {
     /*FILE *f;*/
-    //f = fopen("register.log", "w"); 
+    //f = fopen("register.log", "w");
 
     int32_t reg[32];
     reg[28] = MEM_SIZE / 2;
@@ -50,57 +50,75 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     // replace label with immediate
     for (i = 0; i < MEM_SIZE; i++) {
         char temp[100];
-        op_pc_0 = op[i][0];
-        if (op_pc_0 == LA) {
-            //printf("la\n");
-            strcpy(temp, label[i]);
-            strcat(temp, ":");
-            op[i][3] = search_label(label, temp);
-        } else if (op_pc_0 == LWL) {
-            //printf("lwl\n");
-            strcpy(temp, label[i]);
-            op[i][3] = MEM_SIZE + search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == LSL) {
-            //printf("l.sl\n");
-            strcpy(temp, label[i]);
-            strcat(temp, ":");
-            op[i][3] = MEM_SIZE + search_label(label, temp);
-        } else if (op_pc_0 == BEQ) {
-            //printf("beq\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == BNE) {
-            //printf("bne\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == BLT) {
-            //printf("blt\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == BGT) {
-            //printf("bgt\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == CEQS) {
-            //printf("c.eq.s\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == CLES) {
-            //printf("c.le.s\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == CLTS) {
-            //printf("c.lt.s\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == J) {
-            //printf("j\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
-        } else if (op_pc_0 == JAL) {
-            //printf("jal\n");
-            strcpy(temp, label[i]);
-            op[i][3] = search_label(label, strcat(temp, ":"));
+        switch (op[i][0]) {
+            case LA:
+                strcpy(temp, label[i]);
+                strcat(temp, ":");
+                op[i][3] = search_label(label, temp);
+                break;
+            case LWL:
+                //printf("lwl\n");
+                strcpy(temp, label[i]);
+                op[i][3] = MEM_SIZE + search_label(label, strcat(temp, ":"));
+                break;
+            case LSL:
+                //printf("l.sl\n");
+                strcpy(temp, label[i]);
+                strcat(temp, ":");
+                op[i][3] = MEM_SIZE + search_label(label, temp);
+                break;
+            case BEQ:
+                //printf("beq\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case BEQZ:
+                //printf("bgt\n");
+                strcpy(temp, label[i]);
+                op[i][2] = search_label(label, strcat(temp, ":"));
+                break;
+            case BNE:
+                //printf("bne\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case BLT:
+                //printf("blt\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case BGT:
+                //printf("bgt\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case CEQS:
+                //printf("c.eq.s\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case CLES:
+                //printf("c.le.s\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case CLTS:
+                //printf("c.lt.s\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case J:
+                //printf("j\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            case JAL:
+                //printf("jal\n");
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+                break;
+            default:
+                ;
         }
     }
 
@@ -116,71 +134,71 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             int temp;
             break_bit = 1;
             printf("pc: %d\n", pc);
-            printf("reg: ");fflush(stdout); 
-            printf("\n    zr    at    v0    v1    a0    a1    a2    a3\n");fflush(stdout); 
+            printf("reg: ");fflush(stdout);
+            printf("\n    zr    at    v0    v1    a0    a1    a2    a3\n");fflush(stdout);
             for (i = 0; i < 8; i++) {
-                printf("%6d", reg[i]);fflush(stdout); 
+                printf("%6d", reg[i]);fflush(stdout);
             }
-            printf("\n    t0    t1    t2    t3    t4    t5    t6    t7\n");fflush(stdout); 
+            printf("\n    t0    t1    t2    t3    t4    t5    t6    t7\n");fflush(stdout);
             for (i = 8; i < 16; i++) {
-                printf("%6d", reg[i]);fflush(stdout); 
+                printf("%6d", reg[i]);fflush(stdout);
             }
-            printf("\n    s0    s1    s2    s3    s4    s5    s6    s7\n");fflush(stdout); 
+            printf("\n    s0    s1    s2    s3    s4    s5    s6    s7\n");fflush(stdout);
             for (i = 16; i < 24; i++) {
-                printf("%6d", reg[i]);fflush(stdout); 
+                printf("%6d", reg[i]);fflush(stdout);
             }
-            printf("\n    t8    t9    k0    k1    gp    sp    fp    ra    hi    lo\n");fflush(stdout); 
+            printf("\n    t8    t9    k0    k1    gp    sp    fp    ra    hi    lo\n");fflush(stdout);
             for (i = 24; i < 32; i++) {
-                printf("%6d", reg[i]);fflush(stdout); 
+                printf("%6d", reg[i]);fflush(stdout);
             }
-            printf("%6d", hi);fflush(stdout); 
-            printf("%6d", lo);fflush(stdout); 
-            printf("\n");fflush(stdout); 
-            printf("Press f to show floating point registers. Enter to continue\n");  
-            temp = getchar();  
+            printf("%6d", hi);fflush(stdout);
+            printf("%6d", lo);fflush(stdout);
+            printf("\n");fflush(stdout);
+            printf("Press f to show floating point registers. Enter to continue\n");
+            temp = getchar();
 
             if (temp == 102) {
                 int i;
-                printf("f_reg: ");fflush(stdout); 
-                printf("\n");fflush(stdout); 
+                printf("f_reg: ");fflush(stdout);
+                printf("\n");fflush(stdout);
                 for (i = 0; i < 8; i++) {
                     if (f_reg[i] == 0) {
-                        printf("  %2.2f", 0.0);fflush(stdout); 
+                        printf("  %2.2f", 0.0);fflush(stdout);
                     } else {
-                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout);
                     }
                 }
-                printf("\n");fflush(stdout); 
+                printf("\n");fflush(stdout);
                 for (i = 8; i < 16; i++) {
                     if (f_reg[i] == 0) {
-                        printf("  %2.2f", 0.0);fflush(stdout); 
+                        printf("  %2.2f", 0.0);fflush(stdout);
                     } else {
-                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout);
                     }
                 }
-                printf("\n");fflush(stdout); 
+                printf("\n");fflush(stdout);
                 for (i = 16; i < 24; i++) {
                     if (f_reg[i] == 0) {
-                        printf("  %2.2f", 0.0);fflush(stdout); 
+                        printf("  %2.2f", 0.0);fflush(stdout);
                     } else {
-                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout);
                     }
                 }
-                printf("\n");fflush(stdout); 
+                printf("\n");fflush(stdout);
                 for (i = 24; i < 32; i++) {
                     if (f_reg[i] == 0) {
-                        printf("  %2.2f", 0.0);fflush(stdout); 
+                        printf("  %2.2f", 0.0);fflush(stdout);
                     } else {
-                        printf("  %2.2f ", f_reg[i]);fflush(stdout); 
+                        printf("  %2.2f ", f_reg[i]);fflush(stdout);
                     }
                 }
-                printf("\n");fflush(stdout); 
-                temp = getchar();  
+                printf("\n");fflush(stdout);
+                temp = getchar();
                 printf("Press enter to continue.\n");
-                temp = getchar();  
+                temp = getchar();
             }
-                
-        } 
+
+        }
 
         //printf("%d ", pc);
         if (op_pc_0 == MOVE) {
@@ -320,9 +338,9 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 printf("s.s\n");
             }
             u temp;
-            temp.f = f_reg[op[pc][1]]; 
+            temp.f = f_reg[op[pc][1]];
             assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);
-            mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = temp.i; 
+            mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = temp.i;
         } else if (op_pc_0 == BEQ) {
             if (break_bit) {
                 printf("beq\n");
@@ -330,7 +348,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if(reg[op[pc][1]] == reg[op[pc][2]]) {
                 pc = op[pc][3];
                 continue;
-            } 
+            }
         } else if (op_pc_0 == BNE) {
             if (break_bit) {
                 printf("bne\n");
@@ -338,7 +356,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if(reg[op[pc][1]] != reg[op[pc][2]]) {
                 pc = op[pc][3];
                 continue;
-            } 
+            }
         } else if (op_pc_0 == BLT) {
             if (break_bit) {
                 printf("blt\n");
@@ -346,7 +364,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if(reg[op[pc][1]] < reg[op[pc][2]]) {
                 pc = op[pc][3];
                 continue;
-            } 
+            }
         } else if (op_pc_0 == BGT) {
             if (break_bit) {
                 printf("bgt\n");
@@ -354,7 +372,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if(reg[op[pc][1]] > reg[op[pc][2]]) {
                 pc = op[pc][3];
                 continue;
-            } 
+            }
         } else if (op_pc_0 == CEQS) {
             if (break_bit) {
                 printf("c.eq.s\n");
@@ -362,7 +380,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if(f_reg[op[pc][1]] == f_reg[op[pc][2]]) {
                 pc = op[pc][3];
                 continue;
-            } 
+            }
         } else if (op_pc_0 == CLES) {
             if (break_bit) {
                 printf("c.le.s\n");
@@ -370,7 +388,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if(f_reg[op[pc][1]] <= f_reg[op[pc][2]]) {
                 pc = op[pc][3];
                 continue;
-            } 
+            }
         } else if (op_pc_0 == CLTS) {
             if (break_bit) {
                 printf("c.lt.s\n");
@@ -378,7 +396,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if(f_reg[op[pc][1]] < f_reg[op[pc][2]]) {
                 pc = op[pc][3];
                 continue;
-            } 
+            }
         } else if (op_pc_0 == J) {
             if (break_bit) {
                 printf("j\n");
@@ -389,7 +407,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (break_bit) {
                 printf("jr\n");
             }
-            pc = reg[op[pc][1]]; 
+            pc = reg[op[pc][1]];
             continue;
         } else if (op_pc_0 == JAL) {
             if (break_bit) {
@@ -402,8 +420,8 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (break_bit) {
                 printf("jalr\n");
             }
-            reg[31] = pc + 1; 
-            pc = reg[op[pc][1]]; 
+            reg[31] = pc + 1;
+            pc = reg[op[pc][1]];
             continue;
         } else if (op_pc_0 == PRINTI) {
             if (break_bit) {
@@ -470,23 +488,40 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             }
             f_reg[op[pc][1]] = (float) reg[op[pc][2]];
         } else if (op_pc_0 == EXIT) {
-            if (break_bit) {
-                printf("exit\n");
-            }
+            if (break_bit) printf("exit\n");
             break;
-        } 
-       
+        // ここから岩山追加分
+        } else if (op_pc_0 == CMPILT) {
+            if (break_bit) printf("cmpi.lt\n");
+            reg[op[pc][1]] = reg[op[pc][2]] < op[pc][3];
+        } else if (op_pc_0 == SWAP) {
+            if (break_bit) printf("swap\n");
+            int32_t tmp;
+            tmp = reg[op[pc][1]];
+            reg[op[pc][1]] = reg[op[pc][2]];
+            reg[op[pc][2]] = tmp;
+        } else if (op_pc_0 == BEQZ) {
+            if (break_bit) printf("beqz\n");
+            printf("beqz:%d\n",reg[op[pc][1]]);
+            if(reg[op[pc][1]] == 0) {
+                pc = op[pc][2];
+                continue;
+            }
+        } else if (op_pc_0 != 0){
+            printf("unknown command %d\n", op_pc_0);
+        }
+
         how_many_times_called[pc] += 1;
         pc += 1;
-        
+
     }
-    
+
     //fclose(f);
-   
+
     analyze_how_many_times_called(op, how_many_times_called, label);
 
     return;
-    
+
 }
 
 int search_label (char label[MEM_SIZE][MAX_STR], char *str)
@@ -513,4 +548,4 @@ int search_label (char label[MEM_SIZE][MAX_STR], char *str)
     }
     return 0;
 }
-    
+

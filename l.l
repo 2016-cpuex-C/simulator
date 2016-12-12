@@ -1,5 +1,5 @@
 %{
- 
+
 #include <stdio.h>
 #include <string.h>
 #include "y.tab.h"
@@ -9,7 +9,7 @@ extern YYSTYPE yylval;
 %%
 
 \".*\"  {
-            yylval.str = strdup(yytext); 
+            yylval.str = strdup(yytext);
             return(STRING);
         }
 [ ] ;
@@ -18,7 +18,7 @@ extern YYSTYPE yylval;
 \( ;
 \) ;
 \n      {
-            return(ENTER);   
+            return(ENTER);
         }
 
 \.data  {
@@ -26,7 +26,7 @@ extern YYSTYPE yylval;
         }
 \.asciiz    {
             return(ASCIIZ);
-        } 
+        }
 \.float ;
 \.word  {
             return(WORD);
@@ -37,7 +37,7 @@ extern YYSTYPE yylval;
         }
 \.text  {
             return(TEXT);
-        } 
+        }
 
 $zero   { yylval.num = 0; return(REGISTER); }
 $at     { yylval.num = 1; return(REGISTER); }
@@ -116,14 +116,14 @@ $f31    { yylval.num = 31; return(F_REGISTER); }
                 return IMMEDIATE;
             }
 0x([0-9]|[a-fA-F])* {
-            yylval.str = strdup(yytext); 
-            return(HEX); 
+            yylval.str = strdup(yytext);
+            return(HEX);
             }
 
 
-[a-zA-Z0-9_\.]*: { 
-            yylval.str = strdup(yytext); 
-            return(LABEL); 
+[a-zA-Z0-9_\.]*: {
+            yylval.str = strdup(yytext);
+            return(LABEL);
             }
 
 
@@ -180,6 +180,32 @@ itof        {return(ITOF);}
 exit        {return(EXIT);}
 break       {return(BREAK); }
 
+ /* 2ndで追加 */
+cmp\.eq {return CMPEQ;}
+cmp\.ne {return CMPNE;}
+cmp\.le {return CMPLE;}
+cmp\.ge {return CMPGE;}
+cmp\.lt {return CMPLT;}
+cmp\.gt {return CMPGT;}
+
+cmpi\.eq {return CMPIEQ;}
+cmpi\.ne {return CMPINE;}
+cmpi\.le {return CMPILE;}
+cmpi\.ge {return CMPIGE;}
+cmpi\.lt {return CMPILT;}
+cmpi\.gt {return CMPIGT;}
+
+cmp\.eq\.s {return CMPEQS;}
+cmp\.ne\.s {return CMPNES;}
+cmp\.le\.s {return CMPLES;}
+cmp\.ge\.s {return CMPGES;}
+cmp\.lt\.s {return CMPLTS;}
+cmp\.gt\.s {return CMPGTS;}
+
+beqz {return BEQZ;}
+swap {return SWAP;}
+
+
  /*andi        {return(ANDI); }
 b           {return(B); }
 ble         {return(BLE); }
@@ -198,8 +224,8 @@ trunc\.w\.s {return(TRUNCWS); }
 bc1t        {return(BC1T); }
 bc1f        {return(BC1F); }*/
 
-[a-zA-Z0-9_\.]* { 
-            yylval.str = strdup(yytext); 
+[a-zA-Z0-9_\.]* {
+            yylval.str = strdup(yytext);
             return(LABEL);
                 }
 #.* {}
