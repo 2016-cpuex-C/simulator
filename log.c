@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdint.h>
 #define INT_MAX 2147483647
 #include <inttypes.h>

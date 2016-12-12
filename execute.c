@@ -23,7 +23,7 @@ int search_label (char label[MEM_SIZE][MAX_STR], char *str);
 
 void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char string[MEM_SIZE][MAX_STR], int32_t word[2 * MEM_SIZE][MAX_STR], char *option)
 {
-    FILE *f;
+    /*FILE *f;*/
     //f = fopen("register.log", "w"); 
 
     int32_t reg[32];
@@ -31,7 +31,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     float f_reg[32];
     int32_t hi, lo;
     int32_t mem[MEM_SIZE];
-    int condition_bit = 0;
+    /*int condition_bit = 0;*/
     int break_bit = 0;
     int i;
     for (i = 0; i < MEM_SIZE; i++) {
@@ -49,67 +49,56 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
 
     // replace label with immediate
     for (i = 0; i < MEM_SIZE; i++) {
+        char temp[100];
         op_pc_0 = op[i][0];
         if (op_pc_0 == LA) {
             //printf("la\n");
-            char temp[100];
             strcpy(temp, label[i]);
             strcat(temp, ":");
             op[i][3] = search_label(label, temp);
         } else if (op_pc_0 == LWL) {
             //printf("lwl\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = MEM_SIZE + search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == LSL) {
             //printf("l.sl\n");
-            char temp1[100];
-            strcpy(temp1, label[i]);
-            strcat(temp1, ":");
-            op[i][3] = MEM_SIZE + search_label(label, temp1);
+            strcpy(temp, label[i]);
+            strcat(temp, ":");
+            op[i][3] = MEM_SIZE + search_label(label, temp);
         } else if (op_pc_0 == BEQ) {
             //printf("beq\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == BNE) {
             //printf("bne\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == BLT) {
             //printf("blt\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == BGT) {
             //printf("bgt\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == CEQS) {
             //printf("c.eq.s\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == CLES) {
             //printf("c.le.s\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == CLTS) {
             //printf("c.lt.s\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == J) {
             //printf("j\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         } else if (op_pc_0 == JAL) {
             //printf("jal\n");
-            char temp[100];
             strcpy(temp, label[i]);
             op[i][3] = search_label(label, strcat(temp, ":"));
         }
@@ -425,7 +414,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (break_bit) {
                 printf("print_f\n");
             }
-            printf("%f", f_reg[op[pc][1]]);
+            printf("%.10f", f_reg[op[pc][1]]);
         } else if (op_pc_0 == PRINTC) {
             if (break_bit) {
                 printf("print_c\n");
@@ -435,12 +424,12 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (break_bit) {
                 printf("read_i\n");
             }
-            scanf("%d", &reg[op[pc][1]]);
+            assert(scanf("%d", &reg[op[pc][1]])==1);
         } else if (op_pc_0 == READF) {
             if (break_bit) {
                 printf("read_f\n");
             }
-            scanf("%f", &f_reg[op[pc][1]]);
+            assert(scanf("%f", &f_reg[op[pc][1]])==1);
         } else if (op_pc_0 == SIN) {
             if (break_bit) {
                 printf("sin\n");

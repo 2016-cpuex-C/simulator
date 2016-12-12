@@ -478,7 +478,7 @@ stat:
          }
          ;
 %%
-main(int argc, char *argv[])
+int main(int argc, char *argv[])
 {
 
     FILE *fh;
@@ -498,9 +498,11 @@ main(int argc, char *argv[])
     fclose(f); 
 
     execute(op, label, string, word, argv[1]);
+
+return 0;
 }
 
-yyerror(s)
+void yyerror(s)
 char *s;
 {
     if (parse_error_flag == 0) { 
@@ -510,7 +512,7 @@ char *s;
     fprintf(f, "\n%s",s);
 }
 
-yywrap()
+int yywrap()
 {
     return(1);
 }

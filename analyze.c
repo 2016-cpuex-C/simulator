@@ -2,10 +2,12 @@
 #include <string.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include "global.h" 
+#include "global.h"
 
-analyze_how_many_times_called(int op[MEM_SIZE][5], long int how_many_times_called[MEM_SIZE], char label[2 * MEM_SIZE][MAX_STR]) {
-    
+void analyze_how_many_times_called( int op[MEM_SIZE][5],
+                                    long int how_many_times_called[MEM_SIZE],
+                                    char label[2 * MEM_SIZE][MAX_STR])
+{
     long int i, dynamic_count;
     int op_pc_0;
     dynamic_count = 0;
@@ -272,7 +274,7 @@ analyze_how_many_times_called(int op[MEM_SIZE][5], long int how_many_times_calle
                 fprintf(f, "%-9s", "exit");
                 fprintf(f, "%'ld  \n", temp[op_pc_0]);
             }
-        } 
+        }
     }
     fprintf(f, "\n\n");
     fprintf(f, "label count\n");
