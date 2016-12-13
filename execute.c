@@ -161,8 +161,6 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
                 }
             }
             
-            printf("%6d", hi);fflush(stdout); 
-            printf("%6d", lo);fflush(stdout); 
             printf("\n");fflush(stdout); 
             printf("Press f to show floating point registers. Enter to continue\n");  
             temp = getchar();  
