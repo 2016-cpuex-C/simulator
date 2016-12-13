@@ -154,10 +154,20 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             printf("%6d", hi);fflush(stdout);
             printf("%6d", lo);fflush(stdout);
             printf("\n");fflush(stdout);
-            printf("Press f to show floating point registers. Enter to continue\n");
+            // mem
+            printf("\n  m[0]  m[1]  m[2]  m[3]  m[4]  m[5]  m[6]  m[7]  m[8]  m[9]\n");fflush(stdout);
+            for (i = 0; i < 10; i++) {
+                int d;
+                if ((d=mem[i]) == INT_MAX)
+                    printf("     -");
+                else
+                    printf("%6d", mem[i]);
+            }
+
+            printf("\nPress f to show floating point registers. Enter to continue\n");
             temp = getchar();
 
-            if (temp == 102) {
+            if (temp == 'f') {
                 int i;
                 printf("f_reg: ");fflush(stdout);
                 printf("\n");fflush(stdout);
@@ -493,6 +503,9 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         // ここから岩山追加分
         } else if (op_pc_0 == CMPILT) {
             if (break_bit) printf("cmpi.lt\n");
+            printf("CMPILT: op1 = %d -> %d\n", op[pc][1], reg[op[pc][1]]);
+            printf("CMPILT: op2 = %d -> %d\n", op[pc][2], reg[op[pc][2]]);
+            printf("CMPILT: op3 = %d\n", op[pc][3]);
             reg[op[pc][1]] = reg[op[pc][2]] < op[pc][3];
         } else if (op_pc_0 == SWAP) {
             if (break_bit) printf("swap\n");
@@ -502,7 +515,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             reg[op[pc][2]] = tmp;
         } else if (op_pc_0 == BEQZ) {
             if (break_bit) printf("beqz\n");
-            printf("beqz:%d\n",reg[op[pc][1]]);
+            printf("beqz:\n\t%d -> %d\n",op[pc][1],reg[op[pc][1]]);
             if(reg[op[pc][1]] == 0) {
                 pc = op[pc][2];
                 continue;

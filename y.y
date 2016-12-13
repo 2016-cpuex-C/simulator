@@ -452,7 +452,7 @@ stat:
     }
     | CMPILT REGISTER REGISTER IMMEDIATE {
         fprintf(f, " cmpi.lt");
-        op[pc][0] = CMPILT; op[pc][1] = $2; op[pc][2] = $3;
+        op[pc][0] = CMPILT; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
     | BEQZ REGISTER LABEL {
         fprintf(f, " beqz");
