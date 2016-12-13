@@ -128,6 +128,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         op_pc_0 = op[pc][0];
         how_many_times_called[pc] += 1;
 
+        
         if (break_bit || op_pc_0 == BREAK) { // This instruction is not in mips!!
             //printf("break\n");
             int temp;
@@ -146,10 +147,20 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             for (i = 16; i < 24; i++) {
                 printf("%6d", reg[i]);fflush(stdout); 
             }
-            printf("\n    t8    t9    k0    k1    gp    sp    fp    ra    hi    lo\n");fflush(stdout); 
+            printf("\n    t8    t9    k0    k1    gp    sp    fp    ra\n");fflush(stdout); 
             for (i = 24; i < 32; i++) {
                 printf("%6d", reg[i]);fflush(stdout); 
             }
+            printf("\n");
+            printf("mem: \n");
+            for (i = 0; i < 9; i++) {
+                if (mem[i] == INT_MAX) {
+                    printf("     -");
+                } else{ 
+                     printf("%6d", mem[i]);fflush(stdout); 
+                }
+            }
+            
             printf("%6d", hi);fflush(stdout); 
             printf("%6d", lo);fflush(stdout); 
             printf("\n");fflush(stdout); 
