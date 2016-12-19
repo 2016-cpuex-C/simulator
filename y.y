@@ -73,6 +73,7 @@ char* str;
 %type <num> FTOI
 %type <num> ITOF
 %type <num> EXIT
+%type <num> PRINTB
 %type <num> BREAK
 
 // 2nd
@@ -94,13 +95,18 @@ char* str;
 %type <num> CMPGES
 %type <num> CMPLTS
 %type <num> CMPGTS
+%type <num> BEQI
 %type <num> BEQZ
 %type <num> SWAP
-
-
-
-
-
+%type <num> SWAPS
+%type <num> SELECT
+%type <num> SELECTS
+%type <num> AND
+%type <num> OR
+%type <num> XOR
+%type <num> ANDI
+%type <num> ORI
+%type <num> XORI
 
 %type <num> ENTER
 %type <str> LABEL
@@ -172,6 +178,7 @@ char* str;
 %token FTOI
 %token ITOF
 %token EXIT
+%token PRINTB
 %token BREAK
 %token CMPEQ
 %token CMPNE
@@ -191,8 +198,18 @@ char* str;
 %token CMPGES
 %token CMPLTS
 %token CMPGTS
+%token BEQI
 %token BEQZ
 %token SWAP
+%token SWAPS
+%token SELECT
+%token SELECTS
+%token AND
+%token OR
+%token XOR
+%token ANDI
+%token ORI
+%token XORI
 
 
 
@@ -450,17 +467,131 @@ stat:
         fprintf(f, " break");
         op[pc][0] = BREAK;
     }
+    /* cmp系 */
+        /* cmpi */
+    | CMPIEQ REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " cmpi.eq");
+        op[pc][0] = CMPIEQ; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPINE REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " cmpi.ne");
+        op[pc][0] = CMPINE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPILE REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " cmpi.le");
+        op[pc][0] = CMPILE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPIGE REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " cmpi.ge");
+        op[pc][0] = CMPIGE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
     | CMPILT REGISTER REGISTER IMMEDIATE {
         fprintf(f, " cmpi.lt");
         op[pc][0] = CMPILT; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
+    | CMPIGT REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " cmpi.gt");
+        op[pc][0] = CMPIGT; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+        /* cmp */
+    | CMPEQ REGISTER REGISTER REGISTER {
+        fprintf(f, " cmp.eq");
+        op[pc][0] = CMPEQ; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPNE REGISTER REGISTER REGISTER {
+        fprintf(f, " cmp.ne");
+        op[pc][0] = CMPNE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPLE REGISTER REGISTER REGISTER {
+        fprintf(f, " cmp.le");
+        op[pc][0] = CMPLE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPGE REGISTER REGISTER REGISTER {
+        fprintf(f, " cmp.ge");
+        op[pc][0] = CMPGE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPLT REGISTER REGISTER REGISTER {
+        fprintf(f, " cmp.lt");
+        op[pc][0] = CMPLT; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPGT REGISTER REGISTER REGISTER {
+        fprintf(f, " cmp.gt");
+        op[pc][0] = CMPGT; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+        /* cmp.s */
+    | CMPEQS REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " cmp.eq.s");
+        op[pc][0] = CMPEQS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPNES REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " cmp.ne.s");
+        op[pc][0] = CMPNES; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPLES REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " cmp.le.s");
+        op[pc][0] = CMPLES; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPGES REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " cmp.ge.s");
+        op[pc][0] = CMPGES; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPLTS REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " cmp.lt.s");
+        op[pc][0] = CMPLTS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | CMPGTS REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " cmp.gt.s");
+        op[pc][0] = CMPGTS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    /* beqz */
     | BEQZ REGISTER LABEL {
         fprintf(f, " beqz");
         op[pc][0] = BEQZ; op[pc][1] = $2; strcpy(label[pc], $3);
     }
+    | BEQI REGISTER IMMEDIATE LABEL {
+        fprintf(f, " beqi");
+        op[pc][0] = BEQI; op[pc][1] = $2; op[pc][2] = $3, strcpy(label[pc], $4);
+    }
     | SWAP REGISTER REGISTER {
         fprintf(f, " swap");
         op[pc][0] = SWAP; op[pc][1] = $2; op[pc][2] = $3;
+    }
+    | SWAPS F_REGISTER F_REGISTER {
+        fprintf(f, " swap.s");
+        op[pc][0] = SWAPS; op[pc][1] = $2; op[pc][2] = $3;
+    }
+    | SELECT REGISTER REGISTER REGISTER REGISTER {
+        fprintf(f, " select");
+        op[pc][0] = SELECT; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; op[pc][4] = $5;
+    }
+    | SELECTS F_REGISTER REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " select.s");
+        op[pc][0] = SELECTS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; op[pc][4] = $5;
+    }
+    | AND REGISTER REGISTER REGISTER {
+        fprintf(f, " and");
+        op[pc][0] = AND; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | OR REGISTER REGISTER REGISTER {
+        fprintf(f, " or");
+        op[pc][0] = OR; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | XOR REGISTER REGISTER REGISTER {
+        fprintf(f, " xor");
+        op[pc][0] = XOR; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+
+    | ANDI REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " andi");
+        op[pc][0] = ANDI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | ORI REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " ori");
+        op[pc][0] = ORI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | XORI REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " xori");
+        op[pc][0] = XORI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
     ;
 %%

@@ -178,9 +178,12 @@ sqrt        {return(SQRT);}
 ftoi        {return(FTOI);}
 itof        {return(ITOF);}
 exit        {return(EXIT);}
+print_b     {return(PRINTB);}
 break       {return(BREAK); }
 
+ /*************/
  /* 2ndで追加 */
+ /*************/
 cmp\.eq {return CMPEQ;}
 cmp\.ne {return CMPNE;}
 cmp\.le {return CMPLE;}
@@ -202,8 +205,19 @@ cmp\.ge\.s {return CMPGES;}
 cmp\.lt\.s {return CMPLTS;}
 cmp\.gt\.s {return CMPGTS;}
 
-beqz {return BEQZ;}
-swap {return SWAP;}
+beqi   {return BEQI;}
+beqz   {return BEQZ;}
+swap   {return SWAP;}
+swap.s {return SWAPS;}
+select   {return SELECT;}
+select.s {return SELECTS;}
+
+and  {return AND;}
+or   {return OR;}
+xor  {return XOR;}
+andi {return ANDI;}
+ori  {return ORI;}
+xori {return XORI;}
 
 
  /*andi        {return(ANDI); }
