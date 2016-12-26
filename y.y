@@ -108,6 +108,18 @@ char* str;
 %type <num> ORI
 %type <num> XORI
 
+//pred
+%type <num> CMP
+%type <num> CMPI
+%type <num> CMPS
+%type <num> EQ
+%type <num> NE
+%type <num> LE
+%type <num> GE
+%type <num> LT
+%type <num> GT
+
+
 %type <num> ENTER
 %type <str> LABEL
 %type <str> STRING
@@ -211,6 +223,16 @@ char* str;
 %token ORI
 %token XORI
 
+//pred
+%token CMP
+%token CMPI
+%token CMPS
+%token EQ
+%token NE
+%token LE
+%token GE
+%token LT
+%token GT
 
 
 %token ENTER

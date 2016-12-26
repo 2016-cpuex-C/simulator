@@ -220,6 +220,17 @@ andi {return ANDI;}
 ori  {return ORI;}
 xori {return XORI;}
 
+cmp    {return CMP;}
+cmpi   {return CMPI;}
+cmp\.s {return CMPS;}
+
+eq {return EQ;}
+ne {return NE;}
+le {return LE;}
+ge {return GE;}
+lt {return LT;}
+gt {return GT;}
+
 
  /*andi        {return(ANDI); }
 b           {return(B); }
