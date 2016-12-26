@@ -26,7 +26,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
     //f = fopen("register.log", "w");
 
     int32_t reg[32];
-    reg[28] = MEM_SIZE / 2;
+    /*reg[28] = MEM_SIZE / 2;*/
     float f_reg[32];
     int32_t hi, lo;
     int32_t mem[MEM_SIZE];
@@ -139,6 +139,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
 
         op_pc_0 = op[pc][0];
         how_many_times_called[pc] += 1;
+        /*fprintf(stderr, "_pc=%d\n",pc);*/
 
         if (break_bit || op_pc_0 == BREAK) { // This instruction is not in mips!!
             //printf("break\n");
@@ -360,7 +361,14 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (break_bit) {
                 printf("sw\n");
             }
-            assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);
+            /*assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);*/
+            if (op[pc][2] + reg[op[pc][3]] >= MEM_SIZE) {
+                printf("pc=%d\n", pc);
+                printf("$zr=%d\n", reg[0]);
+                printf("$gp=%d\n", reg[28]);
+                printf("$sp=%d\n", reg[29]);
+                assert(0);
+            }
             mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = reg[op[pc][1]];
         } else if (op_pc_0 == SS) {
             if (break_bit) {
@@ -370,7 +378,10 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             temp.f = f_reg[op[pc][1]];
             /*assert (op[pc][2] + reg[op[pc][3]] < MEM_SIZE);*/
             if (op[pc][2] + reg[op[pc][3]] >= MEM_SIZE) {
-                printf("pc=%d\n",pc);
+                printf("pc=%d\n", pc);
+                printf("$zr=%d\n", reg[0]);
+                printf("$gp=%d\n", reg[28]);
+                printf("$sp=%d\n", reg[29]);
                 assert(0);
             }
             mem[STACK_DIRECTION * (op[pc][2] + reg[op[pc][3]])] = temp.i;
@@ -475,7 +486,11 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             if (break_bit) {
                 printf("read_i\n");
             }
-            assert(scanf("%d", &reg[op[pc][1]])==1);
+            if (scanf("%d", &reg[op[pc][1]])!=1) {
+                printf("READI: error at pc=%d\n", pc);
+                assert(0);
+            }
+            /*assert(scanf("%d", &reg[op[pc][1]])==1);*/
         } else if (op_pc_0 == READF) {
             if (break_bit) {
                 printf("read_f\n");
@@ -611,7 +626,7 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         // SELECTS
         } else if (op_pc_0 == SELECTS) {
             if (break_bit) printf("select.s\n");
-            reg[op[pc][1]] = reg[op[pc][2]] ? f_reg[op[pc][3]]: f_reg[op[pc][4]];
+            f_reg[op[pc][1]] = reg[op[pc][2]] ? f_reg[op[pc][3]]: f_reg[op[pc][4]];
         } else if (op_pc_0 == BEQI) {
             if (break_bit) printf("beqi\n");
             if(reg[op[pc][1]] == op[pc][2]) {
@@ -659,7 +674,6 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
             printf("unknown command %d\n", op_pc_0);
         }
 
-        how_many_times_called[pc] += 1;
         pc += 1;
 
     }

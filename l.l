@@ -8,6 +8,7 @@ extern YYSTYPE yylval;
 %}
 %%
 
+#.* {}
 \".*\"  {
             yylval.str = strdup(yytext);
             return(STRING);
@@ -242,4 +243,3 @@ bc1f        {return(BC1F); }*/
             yylval.str = strdup(yytext);
             return(LABEL);
                 }
-#.* {}
