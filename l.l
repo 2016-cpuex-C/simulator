@@ -186,54 +186,36 @@ break       {return(BREAK); }
  /*************/
  /* 2ndで追加 */
  /*************/
-cmp\.eq {return CMPEQ;}
-cmp\.ne {return CMPNE;}
-cmp\.le {return CMPLE;}
-cmp\.ge {return CMPGE;}
-cmp\.lt {return CMPLT;}
-cmp\.gt {return CMPGT;}
+beqi        {return BEQI;}
+swap        {return SWAP;}
+swap.s      {return SWAPS;}
+select      {return SELECT;}
+select.s    {return SELECTS;}
 
-cmpi\.eq {return CMPIEQ;}
-cmpi\.ne {return CMPINE;}
-cmpi\.le {return CMPILE;}
-cmpi\.ge {return CMPIGE;}
-cmpi\.lt {return CMPILT;}
-cmpi\.gt {return CMPIGT;}
+and         {return AND;}
+or          {return OR;}
+xor         {return XOR;}
+andi        {return ANDI;}
+ori         {return ORI;}
+xori        {return XORI;}
 
-cmp\.eq\.s {return CMPEQS;}
-cmp\.ne\.s {return CMPNES;}
-cmp\.le\.s {return CMPLES;}
-cmp\.ge\.s {return CMPGES;}
-cmp\.lt\.s {return CMPLTS;}
-cmp\.gt\.s {return CMPGTS;}
+cvt\.w\.s   {return(CVTWS); }
+cvt\.s\.w   {return(CVTSW); }
 
-beqi   {return BEQI;}
-beqz   {return BEQZ;}
-swap   {return SWAP;}
-swap.s {return SWAPS;}
-select   {return SELECT;}
-select.s {return SELECTS;}
+cmp         {return CMP;}
+cmpi        {return CMPI;}
+cmp\.s      {return CMPS;}
 
-and  {return AND;}
-or   {return OR;}
-xor  {return XOR;}
-andi {return ANDI;}
-ori  {return ORI;}
-xori {return XORI;}
-
-cmp    {return CMP;}
-cmpi   {return CMPI;}
-cmp\.s {return CMPS;}
-
-eq { yylval.num = EQ; return(PREDICATE); }
-ne { yylval.num = NE; return(PREDICATE); }
-le { yylval.num = LE; return(PREDICATE); }
-ge { yylval.num = GE; return(PREDICATE); }
-lt { yylval.num = LT; return(PREDICATE); }
-gt { yylval.num = GT; return(PREDICATE); }
+eq      { yylval.num = EQ; return(PREDICATE); }
+ne      { yylval.num = NE; return(PREDICATE); }
+le      { yylval.num = LE; return(PREDICATE); }
+ge      { yylval.num = GE; return(PREDICATE); }
+lt      { yylval.num = LT; return(PREDICATE); }
+gt      { yylval.num = GT; return(PREDICATE); }
 
 
- /*andi        {return(ANDI); }
+    /*
+andi        {return(ANDI); }
 b           {return(B); }
 ble         {return(BLE); }
 bge         {return(BGE); }
@@ -249,7 +231,8 @@ cvt\.w\.s   {return(CVTWS); }
 cvt\.s\.w   {return(CVTSW); }
 trunc\.w\.s {return(TRUNCWS); }
 bc1t        {return(BC1T); }
-bc1f        {return(BC1F); }*/
+bc1f        {return(BC1F); }
+    */
 
 [a-zA-Z0-9_\.]* {
             yylval.str = strdup(yytext);
