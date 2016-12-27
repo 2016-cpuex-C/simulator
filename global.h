@@ -2,3 +2,9 @@
 #define MEM_SIZE 4000000
 #define MAX_STR 200
 #define STACK_DIRECTION 1
+#define EQ 0
+#define NE 1
+#define LE 2
+#define GE 3
+#define LT 4
+#define GT 5

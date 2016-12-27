@@ -542,6 +542,83 @@ void execute( int op[MEM_SIZE][5], char label[2 * MEM_SIZE][MAX_STR], char strin
         // ここから岩山追加分 //
         ////////////////////////
         // CMP系
+        } else if (op_pc_0 == CMP) {
+            // | CMP PREDICATE REGISTER REGISTER REGISTER {
+            if (break_bit) printf("cmp\n");
+            switch (op[pc][1]) {
+                case EQ:
+                    reg[op[pc][2]] = reg[op[pc][3]] == reg[op[pc][4]];
+                    break;
+                case NE:
+                    reg[op[pc][2]] = reg[op[pc][3]] != reg[op[pc][4]];
+                    break;
+                case LE:
+                    reg[op[pc][2]] = reg[op[pc][3]] <= reg[op[pc][4]];
+                    break;
+                case GE:
+                    reg[op[pc][2]] = reg[op[pc][3]] >= reg[op[pc][4]];
+                    break;
+                case LT:
+                    reg[op[pc][2]] = reg[op[pc][3]] <  reg[op[pc][4]];
+                    break;
+                case GT:
+                    reg[op[pc][2]] = reg[op[pc][3]] >  reg[op[pc][4]];
+                    break;
+                default:
+                    assert(0);
+            }
+        } else if (op_pc_0 == CMPI) {
+            //| CMPI PREDICATE REGISTER REGISTER IMMEDIATE {
+            if (break_bit) printf("cmpi\n");
+            switch (op[pc][1]) {
+                case EQ:
+                    reg[op[pc][2]] = reg[op[pc][3]] == op[pc][4];
+                    break;
+                case NE:
+                    reg[op[pc][2]] = reg[op[pc][3]] != op[pc][4];
+                    break;
+                case LE:
+                    reg[op[pc][2]] = reg[op[pc][3]] <= op[pc][4];
+                    break;
+                case GE:
+                    reg[op[pc][2]] = reg[op[pc][3]] >= op[pc][4];
+                    break;
+                case LT:
+                    reg[op[pc][2]] = reg[op[pc][3]] <  op[pc][4];
+                    break;
+                case GT:
+                    reg[op[pc][2]] = reg[op[pc][3]] >  op[pc][4];
+                    break;
+                default:
+                    assert(0);
+            }
+
+        } else if (op_pc_0 == CMPS) {
+            //| CMPS PREDICATE REGISTER F_REGISTER F_REGISTER {
+            if (break_bit) printf("cmpi\n");
+            switch (op[pc][1]) {
+                case EQ:
+                    reg[op[pc][2]] = f_reg[op[pc][3]] == f_reg[op[pc][4]];
+                    break;
+                case NE:
+                    reg[op[pc][2]] = f_reg[op[pc][3]] != f_reg[op[pc][4]];
+                    break;
+                case LE:
+                    reg[op[pc][2]] = f_reg[op[pc][3]] <= f_reg[op[pc][4]];
+                    break;
+                case GE:
+                    reg[op[pc][2]] = f_reg[op[pc][3]] >= f_reg[op[pc][4]];
+                    break;
+                case LT:
+                    reg[op[pc][2]] = f_reg[op[pc][3]] <  f_reg[op[pc][4]];
+                    break;
+                case GT:
+                    reg[op[pc][2]] = f_reg[op[pc][3]] >  f_reg[op[pc][4]];
+                    break;
+                default:
+                    assert(0);
+            }
+
             // CMPI
         } else if (op_pc_0 == CMPIEQ) {
             if (break_bit) printf("cmpi.eq\n");

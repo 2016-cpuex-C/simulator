@@ -3,6 +3,7 @@
 #include <stdio.h>
 #include <string.h>
 #include "y.tab.h"
+#include "global.h"
 int c;
 extern YYSTYPE yylval;
 %}
@@ -224,12 +225,12 @@ cmp    {return CMP;}
 cmpi   {return CMPI;}
 cmp\.s {return CMPS;}
 
-eq {return EQ;}
-ne {return NE;}
-le {return LE;}
-ge {return GE;}
-lt {return LT;}
-gt {return GT;}
+eq { yylval.num = EQ; return(PREDICATE); }
+ne { yylval.num = NE; return(PREDICATE); }
+le { yylval.num = LE; return(PREDICATE); }
+ge { yylval.num = GE; return(PREDICATE); }
+lt { yylval.num = LT; return(PREDICATE); }
+gt { yylval.num = GT; return(PREDICATE); }
 
 
  /*andi        {return(ANDI); }
@@ -254,3 +255,4 @@ bc1f        {return(BC1F); }*/
             yylval.str = strdup(yytext);
             return(LABEL);
                 }
+

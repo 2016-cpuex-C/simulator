@@ -112,12 +112,6 @@ char* str;
 %type <num> CMP
 %type <num> CMPI
 %type <num> CMPS
-%type <num> EQ
-%type <num> NE
-%type <num> LE
-%type <num> GE
-%type <num> LT
-%type <num> GT
 
 
 %type <num> ENTER
@@ -128,7 +122,7 @@ char* str;
 %type <num> GLOBL
 %type <num> ASCIIZ WORD
 %type <str> HEX
-%type <num> IMMEDIATE REGISTER F_REGISTER
+%type <num> PREDICATE IMMEDIATE REGISTER F_REGISTER
 %start list
 
 
@@ -227,12 +221,6 @@ char* str;
 %token CMP
 %token CMPI
 %token CMPS
-%token EQ
-%token NE
-%token LE
-%token GE
-%token LT
-%token GT
 
 
 %token ENTER
@@ -243,7 +231,7 @@ char* str;
 %token GLOBL
 %token ASCIIZ WORD
 %token HEX
-%token IMMEDIATE REGISTER F_REGISTER
+%token PREDICATE IMMEDIATE REGISTER F_REGISTER
 
 
 %%
@@ -490,6 +478,20 @@ stat:
         op[pc][0] = BREAK;
     }
     /* cmp系 */
+
+    | CMP PREDICATE REGISTER REGISTER REGISTER {
+        fprintf(f, " cmp");
+        op[pc][0] = CMP; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; op[pc][4] = $5;
+    }
+    | CMPI PREDICATE REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " cmpi");
+        op[pc][0] = CMPI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; op[pc][4] = $5;
+    }
+    | CMPS PREDICATE REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " cmp.s");
+        op[pc][0] = CMPS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; op[pc][4] = $5;
+    }
+
         /* cmpi */
     | CMPIEQ REGISTER REGISTER IMMEDIATE {
         fprintf(f, " cmpi.eq");
