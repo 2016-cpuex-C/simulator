@@ -4,11 +4,6 @@
 #include "execute.c"
 #include "global.h"
 
-static int op[MEM_SIZE][5];
-static char label[2 * MEM_SIZE][MAX_STR];
-static char string[MEM_SIZE][MAX_STR];
-static int32_t word[2 * MEM_SIZE][MAX_STR];
-
 int pc = 1;
 int lc = 0;
 int inner_lc = 0;
@@ -539,7 +534,7 @@ stat:
         fprintf(f, " cvt.s.w");
         op[pc][0] = CVTSW; op[pc][1] = $2; op[pc][2] = $3;
     }
-    | CVTSW REGISTER REGISTER {
+    | CVTWS REGISTER REGISTER {
         fprintf(f, " cvt.w.s");
         op[pc][0] = CVTWS; op[pc][1] = $2; op[pc][2] = $3;
     }
@@ -548,25 +543,35 @@ stat:
 int main(int argc, char *argv[])
 {
 
-    FILE *fh;
-    if (argc == 2 && (fh = fopen(argv[1], "r"))) {
-        yyin = fh;
+    FILE *input;
+    switch (argc) {
+        case 2:
+            input = stdin;
+            break;
+        case 3:
+            if ((input = fopen(argv[2], "r")) == NULL) {
+                fprintf(stderr, "cannot open input file %s\n", argv[2]);
+                exit (-1);
+            }
+            break;
+        default:
+            fprintf(stderr, "usage: %s ASM (INPUT)\n", argv[0]);
+            exit (-1);
     }
-    if (argc == 3 && (fh = fopen(argv[2], "r"))) {
-        yyin = fh;
+    if ((yyin = fopen(argv[1], "r")) == NULL) {
+        fprintf(stderr, "usage: %s ASM (INPUT)\n", argv[0]);
+        exit (-1);
     }
 
     f = fopen("parse.log", "w");
     int i;
-    for (i = 0; i < 2 * MEM_SIZE; i++) {
-        word[i][0] = INT_MAX;
-    }
+    for (i = 0; i < MEM_SIZE; i++) word[i][0] = INT_MAX;
     yyparse();
     fclose(f);
 
-    execute(op, label, string, word, argv[1]);
+    execute(input, argv[1]);
 
-return 0;
+    return 0;
 }
 
 void yyerror(s)
