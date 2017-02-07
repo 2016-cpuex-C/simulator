@@ -84,14 +84,6 @@ void execute(FILE *input, char *option)
                 /*printf("beq\n");*/
                 strcpy(temp, label[i]);
                 op[i][3] = search_label(label, strcat(temp, ":"));
-            CASE BEQZ:
-                /*printf("beqz\n");*/
-                strcpy(temp, label[i]);
-                op[i][2] = search_label(label, strcat(temp, ":"));
-            CASE BEQI:
-                /*printf("beqi\n");*/
-                strcpy(temp, label[i]);
-                op[i][3] = search_label(label, strcat(temp, ":"));
             CASE BNE:
                 /*printf("bne\n");*/
                 strcpy(temp, label[i]);
@@ -101,6 +93,22 @@ void execute(FILE *input, char *option)
                 strcpy(temp, label[i]);
                 op[i][3] = search_label(label, strcat(temp, ":"));
             CASE BGT:
+                /*printf("bgt\n");*/
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+            CASE BEQI:
+                /*printf("beqi\n");*/
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+            CASE BNEI:
+                /*printf("bne\n");*/
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+            CASE BLTI:
+                /*printf("blt\n");*/
+                strcpy(temp, label[i]);
+                op[i][3] = search_label(label, strcat(temp, ":"));
+            CASE BGTI:
                 /*printf("bgt\n");*/
                 strcpy(temp, label[i]);
                 op[i][3] = search_label(label, strcat(temp, ":"));
@@ -133,6 +141,8 @@ void execute(FILE *input, char *option)
     max_stack_dept = 0;
     used_heap_size = reg[28];
 
+    //int cnt=0;
+
     while (1){
         if (max_stack_dept < reg[29]) {
             max_stack_dept = reg[29];
@@ -141,14 +151,15 @@ void execute(FILE *input, char *option)
         //log_main (f, pc, reg, f_reg, mem, option);
 
         op_pc_0 = OP(0);
-        how_many_times_called[pc] += 1;
-        /*fprintf(stderr, "pc=%6d $sp = %d\n",pc,reg[29]);*/
+        how_many_times_called[pc] += 1; //各pcに何回来たか
+        //fprintf(stderr, "pc=%6d $sp = %d\n",pc,reg[29]);
 
         if (break_bit || op_pc_0 == BREAK) { // This instruction is not in mips!!
             //printf("break\n");
             int temp;
             break_bit = 1;
             printf("pc: %d\n", pc);
+            printf("op[0]: %d\n", OP(0));
             printf("reg: ");fflush(stdout);
             printf("\n    zr    at    v0    v1    a0    a1    a2    a3\n");fflush(stdout);
             for (i = 0; i < 8; i++) {
@@ -181,11 +192,11 @@ void execute(FILE *input, char *option)
                 if (mem[i] == INT_MAX) {
                     printf("     -");
                 } else{
-                     printf("%6d", mem[i]);fflush(stdout);
+                    printf("%6d", mem[i]);fflush(stdout);
                 }
             }
             printf("\n");fflush(stdout);
-            printf("Press f to show floating point registers. Enter to continue\n");
+            //printf("Press f to show floating point registers. Enter to continue\n");
             temp = getchar();
 
             if (temp == 'f') {
@@ -224,16 +235,18 @@ void execute(FILE *input, char *option)
                     }
                 }
                 printf("\n");fflush(stdout);
-                temp = getchar();
+                /*temp = getchar();*/
                 printf("Press enter to continue.\n");
-                temp = getchar();
+                if (getchar() == 'b') {
+                    break_bit = 0;
+                }
             } else if (temp == 'b') {
                 break_bit = 0;
             }
 
         }
 
-        //printf("%d ", pc);
+        int tmp_addr;
         switch (op_pc_0) {
             CASE MOVE:
                 if (break_bit) printf("move\n");
@@ -300,15 +313,13 @@ void execute(FILE *input, char *option)
                 reg[OP(1)] = OP(3);
             CASE LWR:
                 if (break_bit) printf("lwr\n");
-                if (OP(2) + reg[OP(3)] > MEM_SIZE) {
+                tmp_addr = OP(2) + reg[OP(3)];
+                if (tmp_addr < 0 || tmp_addr > MEM_SIZE) {
                     fprintf(stderr, "memory access out of range at pc %d\n", pc);
                     fprintf(stderr, "%d($%d) = %d+%d\n", OP(2),OP(3),OP(2),reg[OP(3)]);
                     assert(0);
                 }
-                if (mem[OP(2) + reg[OP(3)]] == 11683) {
-                    fprintf(stderr, "lwr reg[%d]=11683 pc %d\n", OP(1), pc);
-                }
-                reg[OP(1)] = mem[OP(2) + reg[OP(3)]];
+                reg[OP(1)] = mem[tmp_addr];
             CASE LSL:
                 if (break_bit) printf("l.sl\n");
                 I2F(word[OP(3)][0], f_reg[OP(1)]);
@@ -328,19 +339,11 @@ void execute(FILE *input, char *option)
                     fprintf(stderr, "%d($%d) = %d+%d\n", OP(2),OP(3),OP(2),reg[OP(3)]);
                     assert(0);
                 }
-                if (reg[OP(1)] == 11683) {
-                    fprintf(stderr, "sw reg[%d]=11683 pc %d\n", OP(1), pc);
-                }
                 mem[OP(2) + reg[OP(3)]] = reg[OP(1)];
             CASE SS:
                 if (break_bit) printf("s.s\n");
                 assert (OP(2) + reg[OP(3)] < MEM_SIZE);
-                int temp__;
-                /*F2I(f_reg[OP(1)], mem[OP(2) + reg[OP(3)]]);*/
-                F2I(f_reg[OP(1)], temp__);
-                if (temp__ == 11683) assert(0);
-                mem[OP(2) + reg[OP(3)]] = temp__;
-
+                F2I(f_reg[OP(1)], mem[OP(2) + reg[OP(3)]]);
             CASE BEQ:
                 if (break_bit) printf("beq\n");
                 if (reg[OP(1)] == reg[OP(2)]) {
@@ -494,6 +497,24 @@ void execute(FILE *input, char *option)
                     pc = OP(3);
                     continue;
                 }
+            CASE BNEI:
+                if (break_bit) printf("bnei\n");
+                if (reg[OP(1)] != OP(2)) {
+                    pc = OP(3);
+                    continue;
+                }
+            CASE BLTI:
+                if (break_bit) printf("blti\n");
+                if (reg[OP(1)] < OP(2)) {
+                    pc = OP(3);
+                    continue;
+                }
+            CASE BGTI:
+                if (break_bit) printf("bgti\n");
+                if (reg[OP(1)] > OP(2)) {
+                    pc = OP(3);
+                    continue;
+                }
             CASE PRINTB:
                 if (break_bit) printf("print_b\n");
                 printf("%02hhX", reg[OP(1)]);
@@ -523,16 +544,56 @@ void execute(FILE *input, char *option)
                 F2I(f_reg[OP(2)],reg[(OP(1))]);
             CASE BREAK:
                 if (break_bit) printf("break\n");
+
+            // 実験
+            CASE ABSS:
+                if (break_bit) printf("abs.s\n");
+                f_reg[OP(1)] = fabsf(f_reg[OP(2)]);
+            CASE MADDS:
+                if (break_bit) printf("madd.s %d, %d, %d\n", OP(1),OP(2),OP(3));
+                f_reg[OP(1)] = f_reg[OP(2)] + f_reg[OP(3)] * f_reg[OP(4)];
+            CASE RESTORE:
+                if (break_bit) printf("restore\n");
+                tmp_addr = OP(2) + reg[OP(3)];
+                if (tmp_addr < 0 || tmp_addr > MEM_SIZE) {
+                    fprintf(stderr, "memory access out of range at pc %d\n", pc);
+                    fprintf(stderr, "%d($%d) = %d+%d\n", OP(2),OP(3),OP(2),reg[OP(3)]);
+                    assert(0);
+                }
+                reg[OP(1)] = mem[tmp_addr];
+            CASE RESTORES:
+                if (break_bit) printf("restore.s\n");
+                if (OP(2) + reg[OP(3)] > MEM_SIZE) {
+                    fprintf(stderr, "memory access out of range at pc %d\n", pc);
+                    fprintf(stderr, "%d($%d) = %d+%d\n", OP(2),OP(3),OP(2),reg[OP(3)]);
+                    assert(0);
+                }
+                I2F(mem[OP(2) + reg[OP(3)]], f_reg[OP(1)]);
+
+            CASE SAVE:
+                if (break_bit) printf("save\n");
+                //assert (OP(2) + reg[OP(3)] < MEM_SIZE);
+                if (OP(2) + reg[OP(3)] > MEM_SIZE) {
+                    fprintf(stderr, "memory access out of range at pc %d\n", pc);
+                    fprintf(stderr, "%d($%d) = %d+%d\n", OP(2),OP(3),OP(2),reg[OP(3)]);
+                    assert(0);
+                }
+                mem[OP(2) + reg[OP(3)]] = reg[OP(1)];
+            CASE SAVES:
+                if (break_bit) printf("save.s\n");
+                assert (OP(2) + reg[OP(3)] < MEM_SIZE);
+                F2I(f_reg[OP(1)], mem[OP(2) + reg[OP(3)]]);
+
             CASE 0:
                 ;
             DEFAULT:
-                printf("unknown command %d\n", op_pc_0);
+                fprintf(stderr, "unknown command %d\n", op_pc_0);
         }
 
         pc += 1;
 
     }
-END_LOOP:
+    END_LOOP:
 
     //fclose(f);
 

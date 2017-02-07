@@ -48,6 +48,10 @@ char* str;
 %type <num> BNE
 %type <num> BLT
 %type <num> BGT
+%type <num> BEQI
+%type <num> BNEI
+%type <num> BLTI
+%type <num> BGTI
 %type <num> CEQS
 %type <num> CLES
 %type <num> CLTS
@@ -90,8 +94,6 @@ char* str;
 %type <num> CMPGES
 %type <num> CMPLTS
 %type <num> CMPGTS
-%type <num> BEQI
-%type <num> BEQZ
 %type <num> SWAP
 %type <num> SWAPS
 %type <num> SELECT
@@ -107,6 +109,12 @@ char* str;
 %type <num> CMPS
 %type <num> CVTSW
 %type <num> CVTWS
+%type <num> ABSS
+%type <num> MADDS
+%type <num> RESTORE
+%type <num> RESTORES
+%type <num> SAVE
+%type <num> SAVES
 
 %type <num> ENTER
 %type <str> LABEL
@@ -158,6 +166,10 @@ char* str;
 %token BNE
 %token BLT
 %token BGT
+%token BEQI
+%token BNEI
+%token BLTI
+%token BGTI
 %token CEQS
 %token CLES
 %token CLTS
@@ -198,8 +210,6 @@ char* str;
 %token CMPGES
 %token CMPLTS
 %token CMPGTS
-%token BEQI
-%token BEQZ
 %token SWAP
 %token SWAPS
 %token SELECT
@@ -217,6 +227,12 @@ char* str;
 %token CMPS
 %token CVTSW
 %token CVTWS
+%token ABSS
+%token MADDS
+%token RESTORE
+%token RESTORES
+%token SAVE
+%token SAVES
 
 %token ENTER
 %token STRING
@@ -486,10 +502,6 @@ stat:
         fprintf(f, " cmp.s");
         op[pc][0] = CMPS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; op[pc][4] = $5;
     }
-    | BEQI REGISTER IMMEDIATE LABEL {
-        fprintf(f, " beqi");
-        op[pc][0] = BEQI; op[pc][1] = $2; op[pc][2] = $3, strcpy(label[pc], $4);
-    }
     | SWAP REGISTER REGISTER {
         fprintf(f, " swap");
         op[pc][0] = SWAP; op[pc][1] = $2; op[pc][2] = $3;
@@ -537,6 +549,47 @@ stat:
     | CVTWS REGISTER REGISTER {
         fprintf(f, " cvt.w.s");
         op[pc][0] = CVTWS; op[pc][1] = $2; op[pc][2] = $3;
+    }
+    | BEQI REGISTER IMMEDIATE LABEL {
+        fprintf(f, " beqi");
+        op[pc][0] = BEQI; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4);
+    }
+    | BNEI REGISTER IMMEDIATE LABEL {
+        fprintf(f, " bnei");
+        op[pc][0] = BNEI; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4);
+    }
+    | BLTI REGISTER IMMEDIATE LABEL {
+        fprintf(f, " blti");
+        op[pc][0] = BLTI; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4);
+    }
+    | BGTI REGISTER IMMEDIATE LABEL {
+        fprintf(f, " bgti");
+        op[pc][0] = BGTI; op[pc][1] = $2; op[pc][2] = $3; strcpy(label[pc], $4);
+    }
+    /* 実験 */
+    | ABSS F_REGISTER F_REGISTER {
+        fprintf(f, " abs.s");
+        op[pc][0] = ABSS; op[pc][1] = $2; op[pc][2] = $3;
+    }
+    | MADDS F_REGISTER F_REGISTER F_REGISTER F_REGISTER {
+        fprintf(f, " madd.s");
+        op[pc][0] = MADDS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4; op[pc][4] = $5;
+    }
+    | RESTORE REGISTER IMMEDIATE REGISTER  {
+        fprintf(f, " restore");
+        op[pc][0] = RESTORE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | RESTORES F_REGISTER IMMEDIATE REGISTER  {
+        fprintf(f, " restore.s");
+        op[pc][0] = RESTORES; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | SAVE REGISTER IMMEDIATE REGISTER  {
+        fprintf(f, " save");
+        op[pc][0] = SAVE; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | SAVES F_REGISTER IMMEDIATE REGISTER  {
+        fprintf(f, " save.s");
+        op[pc][0] = SAVES; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
     ;
 %%

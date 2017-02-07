@@ -1,4 +1,4 @@
-#define MEM_SIZE 4000000
+#define MEM_SIZE 400000
 #define MAX_STR 200
 #define EQ 0
 #define NE 1

@@ -130,89 +130,100 @@ $f31    { yylval.num = 31; return(F_REGISTER); }
 
 
 
-move        {return(MOVE); }
-neg         {return(NEG); }
-add         {return(ADD); }
-addi        {return(ADDI); }
-sub         {return(SUB); }
-subi        {return(SUBI); }
-mult        {return(MULT); }
-multi       {return(MULTI); }
-div         {return(DIV); }
-divi        {return(DIVI); }
-mov\.s      {return(MOVS); }
-neg\.s      {return(NEGS); }
-add\.s      {return(ADDS); }
-sub\.s      {return(SUBS); }
-mul\.s      {return(MULS); }
-div\.s      {return(DIVS); }
-srl         {return(SRL); }
-sll         {return(SLL); }
-li          {return(LI); }
-la          {return(LA); }
-lwl         {return(LWL); }
-lwr         {return(LWR); }
-l\.sl       {return(LSL); }
-l\.sr       {return(LSR); }
-sw          {return(SW); }
-s\.s        {return(SS); }
-beq         {return(BEQ); }
-bne         {return(BNE); }
-blt         {return(BLT); }
-bgt         {return(BGT); }
-c\.eq\.s    {return(CEQS); }
-c\.le\.s    {return(CLES); }
-c\.lt\.s    {return(CLTS); }
-j           {return(J); }
-jr          {return(JR); }
-jal         {return(JAL); }
-jalr        {return(JALR); }
-print_i     {return(PRINTI);}
-print_f     {return(PRINTF);}
-print_c     {return(PRINTC);}
-read_i      {return(READI);}
-read_f      {return(READF);}
-sin         {return(SIN);}
-cos         {return(COS);}
-atan        {return(ATAN);}
-floor       {return(FLOOR);}
-sqrt        {return(SQRT);}
-ftoi        {return(FTOI);}
-itof        {return(ITOF);}
-exit        {return(EXIT);}
-print_b     {return(PRINTB);}
-break       {return(BREAK); }
+move        {return MOVE;   }
+neg         {return NEG;    }
+add         {return ADD;    }
+addi        {return ADDI;   }
+sub         {return SUB;    }
+subi        {return SUBI;   }
+mult        {return MULT;   }
+multi       {return MULTI;  }
+div         {return DIV;    }
+divi        {return DIVI;   }
+mov\.s      {return MOVS;   }
+neg\.s      {return NEGS;   }
+add\.s      {return ADDS;   }
+sub\.s      {return SUBS;   }
+mul\.s      {return MULS;   }
+div\.s      {return DIVS;   }
+srl         {return SRL;    }
+sll         {return SLL;    }
+li          {return LI;     }
+la          {return LA;     }
+lwl         {return LWL;    }
+lwr         {return LWR;    }
+l\.sl       {return LSL;    }
+l\.sr       {return LSR;    }
+sw          {return SW;     }
+s\.s        {return SS;     }
+beq         {return BEQ;    }
+bne         {return BNE;    }
+blt         {return BLT;    }
+bgt         {return BGT;    }
+beqi        {return BEQI;   }
+bnei        {return BNEI;   }
+blti        {return BLTI;   }
+bgti        {return BGTI;   }
+c\.eq\.s    {return CEQS;   }
+c\.le\.s    {return CLES;   }
+c\.lt\.s    {return CLTS;   }
+j           {return J;      }
+jr          {return JR;     }
+jal         {return JAL;    }
+jalr        {return JALR;   }
+print_i     {return PRINTI; }
+print_f     {return PRINTF; }
+print_c     {return PRINTC; }
+read_i      {return READI;  }
+read_f      {return READF;  }
+sin         {return SIN;    }
+cos         {return COS;    }
+atan        {return ATAN;   }
+floor       {return FLOOR;  }
+sqrt        {return SQRT;   }
+ftoi        {return FTOI;   }
+itof        {return ITOF;   }
+exit        {return EXIT;   }
+print_b     {return PRINTB; }
+break       {return BREAK;  }
 
  /*************/
  /* 2ndで追加 */
  /*************/
-beqi        {return BEQI;}
-swap        {return SWAP;}
-swap.s      {return SWAPS;}
-select      {return SELECT;}
-select.s    {return SELECTS;}
+beqi        {return BEQI;    }
+swap        {return SWAP;    }
+swap.s      {return SWAPS;   }
+select      {return SELECT;  }
+select.s    {return SELECTS; }
 
-and         {return AND;}
-or          {return OR;}
-xor         {return XOR;}
-andi        {return ANDI;}
-ori         {return ORI;}
-xori        {return XORI;}
+and         {return AND;  }
+or          {return OR;   }
+xor         {return XOR;  }
+andi        {return ANDI; }
+ori         {return ORI;  }
+xori        {return XORI; }
 
-cvt\.w\.s   {return(CVTWS); }
-cvt\.s\.w   {return(CVTSW); }
+cvt\.w\.s   {return CVTWS; }
+cvt\.s\.w   {return CVTSW; }
 
-cmp         {return CMP;}
-cmpi        {return CMPI;}
-cmp\.s      {return CMPS;}
+cmp         {return CMP;  }
+cmpi        {return CMPI; }
+cmp\.s      {return CMPS; }
 
-eq      { yylval.num = EQ; return(PREDICATE); }
-ne      { yylval.num = NE; return(PREDICATE); }
-le      { yylval.num = LE; return(PREDICATE); }
-ge      { yylval.num = GE; return(PREDICATE); }
-lt      { yylval.num = LT; return(PREDICATE); }
-gt      { yylval.num = GT; return(PREDICATE); }
+eq      { yylval.num = EQ; return PREDICATE; }
+ne      { yylval.num = NE; return PREDICATE; }
+le      { yylval.num = LE; return PREDICATE; }
+ge      { yylval.num = GE; return PREDICATE; }
+lt      { yylval.num = LT; return PREDICATE; }
+gt      { yylval.num = GT; return PREDICATE; }
 
+ /* 実験 */
+abs\.s      {return ABSS;  }
+madd\.s     {return MADDS; }
+restore     {return RESTORE; }
+restore\.s  {return RESTORES; }
+save        {return SAVE; }
+save\.s     {return SAVES; }
 
     /*
 andi        {return(ANDI); }
