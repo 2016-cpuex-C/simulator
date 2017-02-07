@@ -554,11 +554,11 @@ stat:
         fprintf(f, " xori");
         op[pc][0] = XORI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
-    | CVTSW REGISTER REGISTER {
+    | CVTSW F_REGISTER REGISTER {
         fprintf(f, " cvt.s.w");
         op[pc][0] = CVTSW; op[pc][1] = $2; op[pc][2] = $3;
     }
-    | CVTWS REGISTER REGISTER {
+    | CVTWS REGISTER F_REGISTER {
         fprintf(f, " cvt.w.s");
         op[pc][0] = CVTWS; op[pc][1] = $2; op[pc][2] = $3;
     }
