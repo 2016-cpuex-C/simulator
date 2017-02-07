@@ -148,6 +148,8 @@ mul\.s      {return MULS;   }
 div\.s      {return DIVS;   }
 srl         {return SRL;    }
 sll         {return SLL;    }
+srli        {return SRLI;    }
+slli        {return SLLI;    }
 li          {return LI;     }
 la          {return LA;     }
 lwl         {return LWL;    }

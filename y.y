@@ -36,6 +36,8 @@ char* str;
 %type <num> DIVS
 %type <num> SRL
 %type <num> SLL
+%type <num> SRLI
+%type <num> SLLI
 %type <num> LI
 %type <num> LA
 %type <num> LWL
@@ -154,6 +156,8 @@ char* str;
 %token DIVS
 %token SRL
 %token SLL
+%token SRLI
+%token SLLI
 %token LI
 %token LA
 %token LWL
@@ -348,13 +352,21 @@ stat:
         fprintf(f, " div.s");
         op[pc][0] = DIVS; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
-    | SRL REGISTER REGISTER IMMEDIATE {
+    | SRL REGISTER REGISTER REGISTER {
         fprintf(f, " srl");
         op[pc][0] = SRL; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
-    | SLL REGISTER REGISTER IMMEDIATE {
+    | SLL REGISTER REGISTER REGISTER {
         fprintf(f, " sll");
         op[pc][0] = SLL; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | SRLI REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " srli");
+        op[pc][0] = SRLI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
+    }
+    | SLLI REGISTER REGISTER IMMEDIATE {
+        fprintf(f, " slli");
+        op[pc][0] = SLLI; op[pc][1] = $2; op[pc][2] = $3; op[pc][3] = $4;
     }
     | LI REGISTER IMMEDIATE  {
         fprintf(f, " li");

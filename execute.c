@@ -298,9 +298,15 @@ void execute(FILE *input, char *option)
                 f_reg[OP(1)] =  f_reg[OP(2)] / f_reg[OP(3)];
             CASE SRL:
                 if (break_bit) printf("srl\n");
-                reg[OP(1)] = reg[OP(2)] >> OP(3);
+                reg[OP(1)] = reg[OP(2)] >> reg[OP(3)];
             CASE SLL:
                 if (break_bit) printf("sll\n");
+                reg[OP(1)] = reg[OP(2)] << reg[OP(3)];
+            CASE SRLI:
+                if (break_bit) printf("srli\n");
+                reg[OP(1)] = reg[OP(2)] >> OP(3);
+            CASE SLLI:
+                if (break_bit) printf("slli\n");
                 reg[OP(1)] = reg[OP(2)] << OP(3);
             CASE LI:
                 if (break_bit) printf("li\n");
