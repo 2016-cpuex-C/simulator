@@ -192,7 +192,6 @@ break       {return BREAK;  }
  /*************/
  /* 2ndで追加 */
  /*************/
-beqi        {return BEQI;    }
 swap        {return SWAP;    }
 swap.s      {return SWAPS;   }
 select      {return SELECT;  }

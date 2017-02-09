@@ -298,16 +298,48 @@ void execute(FILE *input, char *option)
                 f_reg[OP(1)] =  f_reg[OP(2)] / f_reg[OP(3)];
             CASE SRL:
                 if (break_bit) printf("srl\n");
-                reg[OP(1)] = reg[OP(2)] >> reg[OP(3)];
+                {
+                    unsigned int o2,o3;
+                    o2 = (unsigned int) reg[OP(2)];
+                    o3 = (unsigned int) reg[OP(3)];
+                    if (o3>=32) {
+                        reg[OP(1)] = 0;
+                    } else {
+                        reg[OP(1)] = (int) (o2 >> o3);
+                    }
+                }
+                /*reg[OP(1)] = reg[OP(2)] >> reg[OP(3)];*/
             CASE SLL:
                 if (break_bit) printf("sll\n");
-                reg[OP(1)] = reg[OP(2)] << reg[OP(3)];
+                {
+                    unsigned int o2,o3;
+                    o2 = (unsigned int) reg[OP(2)];
+                    o3 = (unsigned int) reg[OP(3)];
+                    reg[OP(1)] = (int) (o2 << o3);
+                }
+                /*reg[OP(1)] = reg[OP(2)] << reg[OP(3)];*/
             CASE SRLI:
                 if (break_bit) printf("srli\n");
-                reg[OP(1)] = reg[OP(2)] >> OP(3);
+                {
+                    unsigned int o2,o3;
+                    o2 = (unsigned int) reg[OP(2)];
+                    o3 = (unsigned int) OP(3);
+                    if (o3>=32) {
+                        reg[OP(1)] = 0;
+                    } else {
+                        reg[OP(1)] = (int) (o2 >> o3);
+                    }
+                }
+                /*reg[OP(1)] = reg[OP(2)] >> OP(3);*/
             CASE SLLI:
                 if (break_bit) printf("slli\n");
-                reg[OP(1)] = reg[OP(2)] << OP(3);
+                {
+                    unsigned int o2,o3;
+                    o2 = (unsigned int) reg[OP(2)];
+                    o3 = (unsigned int) OP(3);
+                    reg[OP(1)] = (int) (o2 << o3);
+                }
+                /*reg[OP(1)] = reg[OP(2)] << OP(3);*/
             CASE LI:
                 if (break_bit) printf("li\n");
                 reg[OP(1)] = OP(2);
@@ -632,6 +664,7 @@ int search_label (char label[MEM_SIZE][MAX_STR], char *str)
             exit(0);
         }
     }
+    fprintf(stderr, "search_label: %s not found\n", str);
     assert(0);
 }
 
