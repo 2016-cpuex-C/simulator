@@ -371,44 +371,24 @@ void analyze_how_many_times_called( int op[MEM_SIZE][5],
                 fprintf(f, "%-10s", "cvt.w.s");
                 fprintf(f, "%'ld\n", temp[op_pc_0]);
             }
-        } else if (op_pc_0 == SIN) {
-            {//if (temp[op_pc_0] != 0) {
-                fprintf(f, "%-10s", "sin");
-                fprintf(f, "%'ld\n", temp[op_pc_0]);
-            }
-        } else if (op_pc_0 == COS) {
-            {//if (temp[op_pc_0] != 0) {
-                fprintf(f, "%-10s", "cos");
-                fprintf(f, "%'ld\n", temp[op_pc_0]);
-            }
-        } else if (op_pc_0 == ATAN) {
-            {//if (temp[op_pc_0] != 0) {
-                fprintf(f, "%-10s", "atan");
-                fprintf(f, "%'ld\n", temp[op_pc_0]);
-            }
-        } else if (op_pc_0 == FLOOR) {
-            {//if (temp[op_pc_0] != 0) {
-                fprintf(f, "%-10s", "floor");
-                fprintf(f, "%'ld\n", temp[op_pc_0]);
-            }
-        } else if (op_pc_0 == SQRT) {
-            {//if (temp[op_pc_0] != 0) {
-                fprintf(f, "%-10s", "sqrt");
-                fprintf(f, "%'ld\n", temp[op_pc_0]);
-            }
-        } else if (op_pc_0 == FTOI) {
-            {//if (temp[op_pc_0] != 0) {
-                fprintf(f, "%-10s", "ftoi");
-                fprintf(f, "%'ld\n", temp[op_pc_0]);
-            }
-        } else if (op_pc_0 == ITOF) {
-            {//if (temp[op_pc_0] != 0) {
-                fprintf(f, "%-10s", "itof");
-                fprintf(f, "%'ld\n", temp[op_pc_0]);
-            }
         } else if (op_pc_0 == MADDS) {
             {//if (temp[op_pc_0] != 0) {
                 fprintf(f, "%-10s", "madd.s");
+                fprintf(f, "%'ld\n", temp[op_pc_0]);
+            }
+        } else if (op_pc_0 == BNEI) {
+            {//if (temp[op_pc_0] != 0) {
+                fprintf(f, "%-10s", "bnei");
+                fprintf(f, "%'ld\n", temp[op_pc_0]);
+            }
+        } else if (op_pc_0 == BLTI) {
+            {//if (temp[op_pc_0] != 0) {
+                fprintf(f, "%-10s", "blti");
+                fprintf(f, "%'ld\n", temp[op_pc_0]);
+            }
+        } else if (op_pc_0 == BGTI) {
+            {//if (temp[op_pc_0] != 0) {
+                fprintf(f, "%-10s", "bgti");
                 fprintf(f, "%'ld\n", temp[op_pc_0]);
             }
         } else if (op_pc_0 == RESTORE) {
